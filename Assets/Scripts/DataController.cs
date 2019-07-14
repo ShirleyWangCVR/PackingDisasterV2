@@ -17,11 +17,13 @@ public class DataController : MonoBehaviour
     public GameObject bracketPrefab;
 
     // list of all equations from the loaded json.
-    private EquationData[] allEquationsUsed;
+    private int type;
+    private GameData allEquationData;
+    private int levelIndex; // TODO: need to increment levelIndex after every completed one somehow
     private int[] starsObtained;
     private int[] triedTutorial;
     private int currentLevel; // current level
-    private int levelsCompleted; // use this to set how many levels available on level select
+    // private int levelsCompleted; // use this to set how many levels available on level select
     private string equationDataFileName = "equations.json";
     private PlayerOverallData playerLog;
     private string playerDataFileName;
@@ -41,14 +43,15 @@ public class DataController : MonoBehaviour
         // LoadPlayerProgress();
         SceneManager.LoadScene("Menu");
         currentLevel = 1;
-        levelsCompleted = 0;
+        // levelsCompleted = 0;
+        levelIndex = 0;
+        type = 1;
 
         playerDataFileName = "playerData" + Directory.GetFiles(Application.streamingAssetsPath, "*.json").Length.ToString() + ".json";
-        
-        starsObtained = new int[25];
-        for (int i = 0; i < allEquationsUsed.Length; i++)
+
+        starsObtained = new int[5];
+        for (int i = 0; i < 5; i++)
         {
-            allEquationsUsed[i].SetExpressionsByString();
             starsObtained[i] = 0;
         }
 
@@ -57,6 +60,8 @@ public class DataController : MonoBehaviour
         {
             triedTutorial[j] = 0;
         }
+
+        allEquationData.InitializeEquationsByString();
 
         SceneManager.sceneLoaded += OnSceneLoaded;
         playerLog = new PlayerOverallData();
@@ -86,7 +91,48 @@ public class DataController : MonoBehaviour
     // get current equation to show depending on provided level
     public EquationData GetCurrentEquationData(int level)
     {
-        return allEquationsUsed[level - 1];
+        if (level == 1)
+        {
+            return allEquationData.tut1Equation;
+        }
+        else if (level == 2)
+        {
+            return allEquationData.tut2Equation;
+        }
+        else if (level == 5)
+        {
+            return allEquationData.type1Equations[levelIndex];
+        }
+        else if (level == 6)
+        {
+            return allEquationData.tut3Equation;
+        }
+        else if (level == 10)
+        {
+            return allEquationData.type2Equations[levelIndex];
+        }
+        else if (level == 11)
+        {
+            return allEquationData.tut4Equation;
+        }
+        else if (level == 15)
+        {
+            return allEquationData.type3Equations[levelIndex];
+        }
+        else if (level == 16)
+        {
+            return allEquationData.tut5Equation;
+        }
+        else if (level == 20)
+        {
+            return allEquationData.type4Equations[levelIndex];
+        }
+        else if (level == 25)
+        {
+            return allEquationData.type5Equations[levelIndex];
+        }
+
+        return allEquationData.tut1Equation;
     }
 
     public int GetTriedTutorial(int level)
@@ -156,11 +202,52 @@ public class DataController : MonoBehaviour
         }
     }
 
+    // TODO: stars meter now different
     public void SetNewStars(int level, int stars)
     {
         if (starsObtained[level - 1] < stars)
         {
             starsObtained[level - 1] = stars;
+        }
+    }
+
+    
+    // only called when completed a question
+    public void SubmitNewStars(int level, int stars, bool isTut)
+    {
+        if (level <= 5)
+        {
+            level = 1;
+        }
+        else if (level <= 10)
+        {
+            level = 2;
+        }
+        else if (level <= 15)
+        {
+            level = 3;
+        }
+        else if (level <= 20)
+        {
+            level = 4;
+        }
+        else if (level <= 25)
+        {
+            level = 5;
+        }
+        
+        starsObtained[level - 1] = starsObtained[level - 1] + stars;
+
+        if (! isTut)
+        {
+            levelIndex++;
+        }
+
+        if (starsObtained[level - 1] >= 15)
+        {
+            starsObtained[level - 1] = 15;
+            type++;
+            levelIndex = 0;
         }
     }
 
@@ -179,6 +266,17 @@ public class DataController : MonoBehaviour
         currentLevel = difficulty;
     }
 
+    public int GetTypeQuestion()
+    {
+        return type;
+    }
+
+    public void SetTypeQuestion(int newType)
+    {
+        type = newType;
+    }
+
+    /* // TODO: might not be in use in this version
     public int GetTotalStarsUpTo(int level)
     {
         int sum = 0;
@@ -187,7 +285,7 @@ public class DataController : MonoBehaviour
             sum = sum + starsObtained[i];
         }
         return sum;
-    }
+    } */
 
     // load game data from json
     private void LoadGameData()
@@ -199,13 +297,13 @@ public class DataController : MonoBehaviour
             string jsonGameData = File.ReadAllText(filePath);
             GameData loadedData = JsonUtility.FromJson<GameData>(jsonGameData);
 
-            allEquationsUsed = loadedData.equationData;
+            allEquationData = loadedData;
         } else {
             Debug.LogError("Cannot Load Game Data");
         }
     }
 
-    public int GetLevelsCompleted()
+    /* public int GetLevelsCompleted()
     {
         return levelsCompleted;
     }
@@ -213,7 +311,7 @@ public class DataController : MonoBehaviour
     public void SetLevelsCompleted(int newNum)
     {
         levelsCompleted = newNum;
-    }
+    } */
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -231,6 +329,7 @@ public class DataController : MonoBehaviour
         }
     }
 
+    // TODO: data logging method needs to be changed / updated 
     // at the end of every round, submit current round data
     public void SubmitCurrentRoundData()
     {
@@ -267,6 +366,7 @@ public class DataController : MonoBehaviour
     public void StoreDragData(string dragData)
     {
         currLevelData.AddDragLog(dragData);
+        FindObjectOfType<DragCounter>().DraggedOnce();
     }
 
     

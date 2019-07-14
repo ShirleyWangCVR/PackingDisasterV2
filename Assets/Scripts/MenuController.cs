@@ -16,7 +16,7 @@ public class MenuController : MonoBehaviour
     public void Start()
     {
         dataController = FindObjectOfType<DataController>();
-        currentMax = dataController.GetLevelsCompleted();
+        currentMax = dataController.GetTypeQuestion();
         if (currentMax > 0)
         {
             resumeButton.SetActive(true);
@@ -32,7 +32,7 @@ public class MenuController : MonoBehaviour
 
     public void ResumeGame()
     {
-        dataController.StartLevel(currentMax + 1);
+        dataController.StartLevel(currentMax);
     }
 
     public void LevelSelect()

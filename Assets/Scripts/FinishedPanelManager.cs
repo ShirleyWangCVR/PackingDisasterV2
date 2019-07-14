@@ -10,7 +10,6 @@ public class FinishedPanelManager : MonoBehaviour
 {
     public GameObject finishedDisplay;
     public Text userMessage;
-    public Button nextQuestion;
     public GameObject boxDisplay;
     public GameObject toyDisplay;
     public SimpleObjectPool toyPool;
@@ -29,20 +28,23 @@ public class FinishedPanelManager : MonoBehaviour
     }
 
     // set finished display to if player wins
-    public void DisplayCorrectlyBalanced(int correctValue, int stars)
+    public void DisplayCorrectlyBalanced(int correctValue, int timeStars, int dragStars)
     {
         audioSource.PlayOneShot(youWinSfx, 0.7f);
-        
+
+        starsDisplay[0].sprite = fullStar;
+        for (int i = 0; i < timeStars; i++)
+        {
+            starsDisplay[1 + i].sprite = fullStar;
+        }
+        for (int i = 0; i < dragStars; i++)
+        {
+            starsDisplay[3 + i].sprite = fullStar;
+        }
+
         finishedDisplay.SetActive(true);
         userMessage.text = "You Determined Correctly " + correctValue.ToString() + " in the Box! You Win!";
-        nextQuestion.gameObject.SetActive(true);
-        // boxDisplay.SetActive(true);
         finishedDisplay.transform.Find("Question").gameObject.SetActive(false);
-
-        for (int i = 0; i < stars; i++)
-        {
-            starsDisplay[i].sprite = fullStar;
-        }
 
         if (dataController.GetDifficulty() < 6)
         {        
@@ -87,7 +89,7 @@ public class FinishedPanelManager : MonoBehaviour
     }
 
     // set finished panel to if player lost by wrong answer
-    public void DisplayWrongBalanced(int determined)
+    public void DisplayWrongBalanced()
     {
         audioSource.PlayOneShot(youLoseSfx, 0.7f);
         

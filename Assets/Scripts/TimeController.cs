@@ -5,11 +5,12 @@ using UnityEngine.UI;
 
 public class TimeController : MonoBehaviour
 {
-    public Image showStars;
+    public Image[] showStars;
     public Image gearBack;
     public Image gearFront;
     public GameObject rack;
-    public Sprite[] stars;
+    // public Sprite[] stars;
+    public Sprite emptyStar;
 
     private bool tutorial;
     private int currentStars;
@@ -30,10 +31,10 @@ public class TimeController : MonoBehaviour
         initialX = rack.transform.position.x;
         start = this.transform.Find("Start").position.x;
         end = this.transform.Find("End").position.x;
-        constantBy = (start - end) / 120;
+        constantBy = (start - end) / 90;
 
         currentTime = 0;
-        currentStars = 3;
+        currentStars = 2;
 
         tutorial = dataController.GetDifficulty() <= 2 || dataController.GetDifficulty() == 6 || dataController.GetDifficulty() == 11 || dataController.GetDifficulty() == 16;
     }
@@ -47,23 +48,19 @@ public class TimeController : MonoBehaviour
         {
             currentLength = currentTime * constantBy;
 
-            if (currentTime > 30 && currentStars == 3)
+            if (currentTime > 30 && currentStars == 2)
             {
-                currentStars = 2;
-                showStars.sprite = stars[2];
-            }
-            if (currentTime > 60 && currentStars == 2)
-            {
+                showStars[0].sprite = emptyStar;
                 currentStars = 1;
-                showStars.sprite = stars[1];
+                // showStars.sprite = stars[2];
             }
-            if (currentTime > 90 && currentStars == 1)
+            if (currentTime > 60 && currentStars == 1)
             {
+                showStars[1].sprite = emptyStar;
                 currentStars = 0;
-                showStars.sprite = stars[0];
             }
 
-            if (currentTime <= 120)
+            if (currentTime <= 90)
             {
                 rack.transform.position = new Vector3(initialX - currentLength, rack.transform.position.y, rack.transform.position.z);
                 
@@ -75,8 +72,6 @@ public class TimeController : MonoBehaviour
                 gearBack.transform.Rotate(0, 0, -0.16f, Space.Self);
                 gearFront.transform.Rotate(0, 0, -0.16f, Space.Self);
             }
-
-            
         }
     }
 

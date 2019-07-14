@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class LevelSelectButton : MonoBehaviour
 {
     public LevelSelectController levelSelectController;
+    public int level;
     
     // Start is called before the first frame update
     void Start()
@@ -16,9 +17,9 @@ public class LevelSelectButton : MonoBehaviour
 
     public void StartLevel()
     {
-        string num = this.transform.Find("Number").gameObject.GetComponent<Text>().text;
+        // string num = this.transform.Find("Number").gameObject.GetComponent<Text>().text;
 
-        int level = Int32.Parse(num);
+        // int level = Int32.Parse(num);
         levelSelectController.StartLevel(level);
     }
 }

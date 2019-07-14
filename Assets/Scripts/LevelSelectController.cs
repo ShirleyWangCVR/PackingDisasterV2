@@ -7,10 +7,13 @@ using UnityEngine.UI;
 // optimize this at a later date once we figure out levels
 public class LevelSelectController : MonoBehaviour
 {
-    public GameObject[] levelButtons;
+    public Button[] levelButtons;
     public GameObject[] topicLabels;
+    public Button[] tutorialButtons;
+    public GameObject[] starMeters;
     public Sprite[] stars;
     public Sprite redback;
+    public GameObject endingButton;
 
     private DataController dataController;
     private int level;
@@ -19,55 +22,78 @@ public class LevelSelectController : MonoBehaviour
     void Start()
     {
         dataController = FindObjectOfType<DataController>();
-        int levelsShow = dataController.GetLevelsCompleted();
+        int levelsShow = dataController.GetTypeQuestion();
 
-        // eventually set up buttons according to how much they've completed.
-        for (int i = 0; i < 25; i++)
+        Debug.Log(levelsShow);
+        if (levelsShow == 6)
         {
-            levelButtons[i].transform.Find("Number").gameObject.GetComponent<Text>().text = (i + 1).ToString();
-
-            int levelStars = dataController.GetStars(i + 1);
-            levelButtons[i].transform.Find("Stars").gameObject.GetComponent<Image>().sprite = stars[levelStars];
-
-            // check if i > levels completed, if so set not interactable and hide num and stars
-            // uncomment this when actual people play, keep this commented for easy testing
-            /* if (i > levelsShow)
-            {
-                levelButtons[i].GetComponent<Button>().interactable = false;
-                levelButtons[i].transform.Find("Number").gameObject.SetActive(false);
-                levelButtons[i].transform.Find("Stars").gameObject.SetActive(false);
-            }  */
+            endingButton.SetActive(true);
         }
 
-        // to disable the locks on the next topic or make sure the next topic is locked
-        for (int i = 1; i < 5; i++)
+        for (int i = 0; i < 5; i++)
         {
-            if (dataController.GetTotalStarsUpTo(5 * i) >= 12 * i && levelsShow >= 5 * i)
+            int starsCount = dataController.GetStars(i + 1);
+            starMeters[i].transform.Find("Cover").gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(292 * (15 - starsCount) / 15, 32);
+            starMeters[i].transform.Find("Text").gameObject.GetComponent<Text>().text = starsCount.ToString() + "/15";
+
+            if (i < levelsShow)
             {
-                // show next topic as not locked
+                // unlock
                 topicLabels[i].transform.Find("Text").gameObject.SetActive(true);
                 topicLabels[i].transform.Find("Lock").gameObject.SetActive(false);
                 topicLabels[i].GetComponent<Image>().sprite = redback;
+
+                if (i == levelsShow - 1)
+                {
+                    if (i == 0)
+                    {
+                        if (starsCount < 3)
+                        {
+                            tutorialButtons[1].interactable = false;
+                            tutorialButtons[1].transform.Find("Text").gameObject.SetActive(false);
+                        }
+                        if (starsCount < 6)
+                        {
+                            levelButtons[i].interactable = false;
+                            levelButtons[i].transform.Find("Text").gameObject.SetActive(false);
+                        }
+                    }
+                    else if (i < 4)
+                    {
+                        if (starsCount < 3)
+                        {
+                            levelButtons[i].interactable = false;
+                            levelButtons[i].transform.Find("Text").gameObject.SetActive(false);
+                        }
+                    }
+                }
             }
-            // keep this commented for easy testing, uncommented for actual playing
-            /* else
+            else
             {
-                // make sure next level one is locked
-                levelButtons[5 * i].GetComponent<Button>().interactable = false;
-                levelButtons[5 * i].transform.Find("Number").gameObject.SetActive(false);
-                levelButtons[5 * i].transform.Find("Stars").gameObject.SetActive(false);
-            } */
+                levelButtons[i].interactable = false;
+                levelButtons[i].transform.Find("Text").gameObject.SetActive(false);
+
+                if (i < 4)
+                {
+                    tutorialButtons[i + 1].interactable = false;
+                    tutorialButtons[i + 1].transform.Find("Text").gameObject.SetActive(false);
+                }
+            }
         }
     }
 
     public void StartLevel(int level)
     {
-        dataController.SetDifficulty(level);
         dataController.StartLevel(level);
     }
 
     public void BackToMenu()
     {
         SceneManager.LoadScene("Menu");
+    }
+
+    public void ToEnding()
+    {
+        SceneManager.LoadScene("Ending");
     }
 }

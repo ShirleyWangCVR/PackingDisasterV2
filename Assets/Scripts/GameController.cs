@@ -16,11 +16,12 @@ public class GameController : MonoBehaviour
     public SimpleObjectPool toyPool;
     public FinishedPanelManager finishedDisplayManager;
     public TimeController timeController;
+    public DragCounter dragCounter;
 
     protected DataController dataController;
     protected EquationData equation; // current equation being displayed
     protected bool currentlyDragging;
-    protected bool notTutorial;
+    protected bool isTutorial;
     protected bool roundActive;
     protected int level;
 
@@ -31,23 +32,23 @@ public class GameController : MonoBehaviour
         dataController = FindObjectOfType<DataController>();
         level = dataController.GetDifficulty();
         equation = dataController.GetCurrentEquationData(level);
-        levelText.text = "Level " + level.ToString();
+        isTutorial = level <= 2 || level == 6 || level == 11 || level == 16;
+
+        if (level <= 5)
+        {
+            level = 1;
+        }
+        else
+        {
+            level = level / 5 + level % 5;
+        }
+
+        levelText.text = "Level " + level.ToString(); // TODO: what to do about level
         currentlyDragging = false;
         roundActive = true;
 
         // set up seesaw according to equation
         SetUpSeesaw();
-
-        // if not tutorial then have a time limit
-        /* if (! (level <= 2 || level == 6 || level == 11 || level == 16))
-        {
-            notTutorial = true;
-            // timeUsedText.text = "Time Left: " + timeLeft.ToString();
-        }
-        else
-        {
-            notTutorial = false;
-        } */
     }
 
     public EquationData GetEquation()
@@ -180,28 +181,33 @@ public class GameController : MonoBehaviour
                 if (seesaw.GetComponent<SeesawController>().CorrectlyBalanced())
                 {
                     // update total levels completed
-                    int numCompleted = dataController.GetLevelsCompleted();
+                    /* int numCompleted = dataController.GetLevelsCompleted();
                     if (level > numCompleted)
                     {
                         dataController.SetLevelsCompleted(level);
-                    }
+                    } */
+
+
                     stars = timeController.FinishedGameGetStars();
-                    dataController.SetNewStars(level, stars);
+                    stars = stars + dragCounter.GetStars();
+                    stars = stars + 1;
+                    dataController.SubmitNewStars(level, stars, isTutorial);
                     done = true;
 
-                    finishedDisplayManager.DisplayCorrectlyBalanced(equation.variableValue, stars);
+                    finishedDisplayManager.DisplayCorrectlyBalanced(equation.variableValue, timeController.FinishedGameGetStars(), dragCounter.GetStars());
                 }
                 else
                 {
                     // lost because wrong answer, get whatever they answered
-                    int side = (int) seesaw.GetComponent<SeesawController>().GetLeftHandSideValue();
+                    finishedDisplayManager.DisplayWrongBalanced();
+                    /* int side = (int) seesaw.GetComponent<SeesawController>().GetLeftHandSideValue();
                     if (equation.variableValue != side)
                     {
-                        finishedDisplayManager.DisplayWrongBalanced(side);
+                        finishedDisplayManager.DisplayWrongBalanced();
                     } else {
                         side = (int) seesaw.GetComponent<SeesawController>().GetRightHandSideValue();
-                        finishedDisplayManager.DisplayWrongBalanced(side);
-                    }
+                        finishedDisplayManager.DisplayWrongBalanced();
+                    } */
                     done = false;
                     reason = "Incorrect Value";
                 }
@@ -248,7 +254,7 @@ public class GameController : MonoBehaviour
     }
 
     // move onto next question
-    public void NextQuestion()
+    /* public void NextQuestion()
     {
         // tell DataController to move to next question and then load main scene again
         if (level > dataController.GetLevelsCompleted())
@@ -264,5 +270,10 @@ public class GameController : MonoBehaviour
         {
             dataController.StartLevel(level + 1);
         }
+    } */
+
+    public void BackToLevelSelect()
+    {
+        SceneManager.LoadScene("Level Select");
     }
 }
