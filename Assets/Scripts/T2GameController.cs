@@ -18,15 +18,26 @@ public class T2GameController : GameController
         dataController = FindObjectOfType<DataController>();
         level = dataController.GetDifficulty();
         equation = dataController.GetCurrentEquationData(level);
-        levelText.text = "Level " + level.ToString();
-        currentlyDragging = false;
-        roundActive = true;
+        isTutorial = level <= 2 || level == 6 || level == 11 || level == 16;
 
         if (level < 11)
         {
             BothSideOperations bso = FindObjectOfType<BothSideOperations>();
             bso.gameObject.SetActive(false);
         }
+
+        if (level <= 5)
+        {
+            level = 1;
+        }
+        else
+        {
+            level = level / 5 + level % 5;
+        }
+
+        levelText.text = "Level " + level.ToString(); // TODO: what to do about level
+        currentlyDragging = false;
+        roundActive = true;
 
         // set up seesaw according to equation
         SetUpSeesaw();

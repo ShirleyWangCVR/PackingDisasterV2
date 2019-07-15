@@ -38,9 +38,6 @@ public class PlayerOverallData
 
         foreach (string dragData in movesData.dragLog)
         {
-            //string dragData = movesData.dragLog[i];
-            Debug.Log(dragData);
-
             string[] check = dragData.Split(new string[] { " from " }, StringSplitOptions.None);
             if (check.Length > 1)
             {

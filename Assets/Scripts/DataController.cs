@@ -19,9 +19,10 @@ public class DataController : MonoBehaviour
     // list of all equations from the loaded json.
     private int type;
     private GameData allEquationData;
-    private int levelIndex; // TODO: need to increment levelIndex after every completed one somehow
+    private int[] levelIndexes; 
     private int[] starsObtained;
     private int[] triedTutorial;
+    private int[] tutorialStars;
     private int currentLevel; // current level
     // private int levelsCompleted; // use this to set how many levels available on level select
     private string equationDataFileName = "equations.json";
@@ -44,21 +45,20 @@ public class DataController : MonoBehaviour
         SceneManager.LoadScene("Menu");
         currentLevel = 1;
         // levelsCompleted = 0;
-        levelIndex = 0;
         type = 1;
 
         playerDataFileName = "playerData" + Directory.GetFiles(Application.streamingAssetsPath, "*.json").Length.ToString() + ".json";
 
+        levelIndexes = new int[5];
         starsObtained = new int[5];
+        triedTutorial = new int[5];
+        tutorialStars = new int[5];
         for (int i = 0; i < 5; i++)
         {
             starsObtained[i] = 0;
-        }
-
-        triedTutorial = new int[5];
-        for (int j = 0; j < 5; j++)
-        {
-            triedTutorial[j] = 0;
+            levelIndexes[i] = 0;
+            triedTutorial[i] = 0;
+            tutorialStars[i] = 0;
         }
 
         allEquationData.InitializeEquationsByString();
@@ -101,7 +101,7 @@ public class DataController : MonoBehaviour
         }
         else if (level == 5)
         {
-            return allEquationData.type1Equations[levelIndex];
+            return allEquationData.type1Equations[levelIndexes[0]];
         }
         else if (level == 6)
         {
@@ -109,7 +109,7 @@ public class DataController : MonoBehaviour
         }
         else if (level == 10)
         {
-            return allEquationData.type2Equations[levelIndex];
+            return allEquationData.type2Equations[levelIndexes[1]];
         }
         else if (level == 11)
         {
@@ -117,7 +117,7 @@ public class DataController : MonoBehaviour
         }
         else if (level == 15)
         {
-            return allEquationData.type3Equations[levelIndex];
+            return allEquationData.type3Equations[levelIndexes[2]];
         }
         else if (level == 16)
         {
@@ -125,11 +125,11 @@ public class DataController : MonoBehaviour
         }
         else if (level == 20)
         {
-            return allEquationData.type4Equations[levelIndex];
+            return allEquationData.type4Equations[levelIndexes[3]];
         }
         else if (level == 25)
         {
-            return allEquationData.type5Equations[levelIndex];
+            return allEquationData.type5Equations[levelIndexes[4]];
         }
 
         return allEquationData.tut1Equation;
@@ -202,19 +202,62 @@ public class DataController : MonoBehaviour
         }
     }
 
-    // TODO: stars meter now different
+    /* // TODO: stars meter now different
     public void SetNewStars(int level, int stars)
     {
         if (starsObtained[level - 1] < stars)
         {
             starsObtained[level - 1] = stars;
         }
-    }
+    } */
 
     
     // only called when completed a question
     public void SubmitNewStars(int level, int stars, bool isTut)
     {
+        level = currentLevel;
+        
+        if (isTut)
+        {
+            if (level <= 2)
+            {
+                int starsBefore = tutorialStars[level - 1];
+                if (starsBefore <= stars)
+                {
+                    tutorialStars[level - 1] = stars;
+                    stars = stars - starsBefore;
+                }
+            }
+            else if (level == 6)
+            {
+                int starsBefore = tutorialStars[2];
+                Debug.Log(starsBefore);
+                if (starsBefore <= stars)
+                {
+                    tutorialStars[2] = stars;
+                    stars = stars - starsBefore;
+                }
+            }
+            else if (level == 11)
+            {
+                int starsBefore = tutorialStars[3];
+                if (starsBefore <= stars)
+                {
+                    tutorialStars[3] = stars;
+                    stars = stars - starsBefore;
+                }
+            }
+            else if (level == 16)
+            {
+                int starsBefore = tutorialStars[4];
+                if (starsBefore <= stars)
+                {
+                    tutorialStars[4] = stars;
+                    stars = stars - starsBefore;
+                }
+            }
+        }
+        
         if (level <= 5)
         {
             level = 1;
@@ -240,15 +283,26 @@ public class DataController : MonoBehaviour
 
         if (! isTut)
         {
-            levelIndex++;
+            levelIndexes[level - 1]++;
+            if (levelIndexes[level - 1] == 4) // TODO: capped at 4 because only 4 equations mostly, eventually up to 10 once json is updated
+            {
+                levelIndexes[level - 1] = 0;
+            }
         }
 
         if (starsObtained[level - 1] >= 15)
         {
             starsObtained[level - 1] = 15;
-            type++;
-            levelIndex = 0;
+            if (level == type)
+            {
+                type++;
+            }
         }
+    }
+
+    public int GetTutorialStars(int index)
+    {
+        return tutorialStars[index];
     }
 
     public int GetStars(int level)
@@ -276,17 +330,6 @@ public class DataController : MonoBehaviour
         type = newType;
     }
 
-    /* // TODO: might not be in use in this version
-    public int GetTotalStarsUpTo(int level)
-    {
-        int sum = 0;
-        for (int i = 0; i < level; i++)
-        {
-            sum = sum + starsObtained[i];
-        }
-        return sum;
-    } */
-
     // load game data from json
     private void LoadGameData()
     {
@@ -302,16 +345,6 @@ public class DataController : MonoBehaviour
             Debug.LogError("Cannot Load Game Data");
         }
     }
-
-    /* public int GetLevelsCompleted()
-    {
-        return levelsCompleted;
-    }
-
-    public void SetLevelsCompleted(int newNum)
-    {
-        levelsCompleted = newNum;
-    } */
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -383,6 +416,27 @@ public class DataController : MonoBehaviour
 
 
     // methods past this point work but currently not in use
+
+    /* 
+    public int GetTotalStarsUpTo(int level)
+    {
+        int sum = 0;
+        for (int i = 0; i < level; i++)
+        {
+            sum = sum + starsObtained[i];
+        }
+        return sum;
+    } */
+
+    /* public int GetLevelsCompleted()
+    {
+        return levelsCompleted;
+    }
+
+    public void SetLevelsCompleted(int newNum)
+    {
+        levelsCompleted = newNum;
+    } */
 
     // load dialogue data from json
     /* private void LoadDialogueData()

@@ -16,7 +16,7 @@ public class MenuController : MonoBehaviour
     public void Start()
     {
         dataController = FindObjectOfType<DataController>();
-        currentMax = dataController.GetTypeQuestion();
+        currentMax = dataController.GetDifficulty();
         if (currentMax > 0)
         {
             resumeButton.SetActive(true);

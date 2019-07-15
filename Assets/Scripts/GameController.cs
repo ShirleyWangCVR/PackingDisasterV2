@@ -180,20 +180,13 @@ public class GameController : MonoBehaviour
             {
                 if (seesaw.GetComponent<SeesawController>().CorrectlyBalanced())
                 {
-                    // update total levels completed
-                    /* int numCompleted = dataController.GetLevelsCompleted();
-                    if (level > numCompleted)
-                    {
-                        dataController.SetLevelsCompleted(level);
-                    } */
-
-
                     stars = timeController.FinishedGameGetStars();
                     stars = stars + dragCounter.GetStars();
                     stars = stars + 1;
+                    Debug.Log("In Game Controller about to call SubmitNewStars");
                     dataController.SubmitNewStars(level, stars, isTutorial);
+                    Debug.Log("SubmitNewStars called");
                     done = true;
-
                     finishedDisplayManager.DisplayCorrectlyBalanced(equation.variableValue, timeController.FinishedGameGetStars(), dragCounter.GetStars());
                 }
                 else

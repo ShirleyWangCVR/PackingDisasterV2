@@ -35,7 +35,7 @@ public class DragCounter : MonoBehaviour
         }
         else if (level == 5)
         {
-            boundaryOne = 5;
+            boundaryOne = 10; // 12???
         }
 
         boundaryTwo = 2 * boundaryOne;

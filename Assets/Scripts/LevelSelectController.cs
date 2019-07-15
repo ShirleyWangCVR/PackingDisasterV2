@@ -13,6 +13,7 @@ public class LevelSelectController : MonoBehaviour
     public GameObject[] starMeters;
     public Sprite[] stars;
     public Sprite redback;
+    public Sprite fullStar;
     public GameObject endingButton;
 
     private DataController dataController;
@@ -36,6 +37,18 @@ public class LevelSelectController : MonoBehaviour
             starMeters[i].transform.Find("Cover").gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(292 * (15 - starsCount) / 15, 32);
             starMeters[i].transform.Find("Text").gameObject.GetComponent<Text>().text = starsCount.ToString() + "/15";
 
+            int tutStars = dataController.GetTutorialStars(i);
+
+            for (int j = 0; j < tutStars; j++)
+            {
+                tutorialButtons[i].transform.Find("Stars").GetChild(j).gameObject.GetComponent<Image>().sprite = fullStar;
+            }
+
+            /* foreach (Transform star in tutorialButtons[i].transform.Find("Stars"))
+            {
+                star.gameObject.GetComponent<Image>().sprite = fullStar;
+            } */
+            
             if (i < levelsShow)
             {
                 // unlock
@@ -51,6 +64,7 @@ public class LevelSelectController : MonoBehaviour
                         {
                             tutorialButtons[1].interactable = false;
                             tutorialButtons[1].transform.Find("Text").gameObject.SetActive(false);
+                            tutorialButtons[i + 1].transform.Find("Stars").gameObject.SetActive(false);
                         }
                         if (starsCount < 6)
                         {
@@ -77,6 +91,7 @@ public class LevelSelectController : MonoBehaviour
                 {
                     tutorialButtons[i + 1].interactable = false;
                     tutorialButtons[i + 1].transform.Find("Text").gameObject.SetActive(false);
+                    tutorialButtons[i + 1].transform.Find("Stars").gameObject.SetActive(false);
                 }
             }
         }
