@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour
     public FinishedPanelManager finishedDisplayManager;
     public TimeController timeController;
     public DragCounter dragCounter;
+    public HintSystem hintSystem;
 
     protected DataController dataController;
     protected EquationData equation; // current equation being displayed
@@ -24,6 +25,7 @@ public class GameController : MonoBehaviour
     protected bool isTutorial;
     protected bool roundActive;
     protected int level;
+    protected float inputTimer;
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +35,7 @@ public class GameController : MonoBehaviour
         level = dataController.GetDifficulty();
         equation = dataController.GetCurrentEquationData(level);
         isTutorial = level <= 2 || level == 6 || level == 11 || level == 16;
+        inputTimer = 0;
 
         if (level <= 5)
         {
@@ -158,6 +161,23 @@ public class GameController : MonoBehaviour
             {
                 EndRound("Scale Tipped");
             }
+        }
+
+        inputTimer += Time.deltaTime;
+        //Then you do your usual input checks
+        if (Input.GetMouseButton(0))
+        {
+            //Reset the timer
+            inputTimer = 0;
+            //Do player action
+        }
+        //5 seconds or anything you want, I would turn that into a public field so you can change it from the inspector
+        if(inputTimer >= 5f)
+        {
+            inputTimer = 0;
+            //Kill player or whatever
+            // Debug.Log("Inactive for 5 secs");
+            hintSystem.InactiveForWhile();
         }
     }
 

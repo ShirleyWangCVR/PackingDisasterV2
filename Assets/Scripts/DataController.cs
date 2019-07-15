@@ -399,6 +399,7 @@ public class DataController : MonoBehaviour
     public void StoreDragData(string dragData)
     {
         currLevelData.AddDragLog(dragData);
+        FindObjectOfType<HintSystem>().AddDragInfo(dragData);
         FindObjectOfType<DragCounter>().DraggedOnce();
     }
 

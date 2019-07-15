@@ -25,7 +25,6 @@ public class LevelSelectController : MonoBehaviour
         dataController = FindObjectOfType<DataController>();
         int levelsShow = dataController.GetTypeQuestion();
 
-        Debug.Log(levelsShow);
         if (levelsShow == 6)
         {
             endingButton.SetActive(true);
@@ -44,11 +43,6 @@ public class LevelSelectController : MonoBehaviour
                 tutorialButtons[i].transform.Find("Stars").GetChild(j).gameObject.GetComponent<Image>().sprite = fullStar;
             }
 
-            /* foreach (Transform star in tutorialButtons[i].transform.Find("Stars"))
-            {
-                star.gameObject.GetComponent<Image>().sprite = fullStar;
-            } */
-            
             if (i < levelsShow)
             {
                 // unlock

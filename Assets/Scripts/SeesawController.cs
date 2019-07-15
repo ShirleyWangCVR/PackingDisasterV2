@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -213,7 +214,6 @@ public class SeesawController : MonoBehaviour
 
         if (tilt != prevTilt)
         {
-            Debug.Log("Tilt changed");
             CheckTilt();
         }
 
@@ -414,13 +414,11 @@ public class SeesawController : MonoBehaviour
     {
         if (tilt < 0.05 && tilt > -0.05)
         {
-            Debug.Log("Safe");
             StopCoroutine(soundDanger);
             audioSource.Stop();
         }
         else
         {
-            Debug.Log("Starting Danger");
             soundDanger = StartCoroutine(PlayDanger());
         }
     }
@@ -430,5 +428,36 @@ public class SeesawController : MonoBehaviour
         yield return new WaitForSeconds(2f);
         audioSource.Play();
     }
+
+    public int LeftSideNumVariables()
+    {
+        return leftHandSidePositive.GetComponent<SeesawSide>().NumVariables() + leftHandSideNegative.GetComponent<SeesawSide>().NumVariables();
+    }
+
+    public int RightSideNumVariables()
+    {
+        return rightHandSidePositive.GetComponent<SeesawSide>().NumVariables() + rightHandSideNegative.GetComponent<SeesawSide>().NumVariables();
+    }
+
+    public int LeftSideNumValues()
+    {
+        return leftHandSidePositive.GetComponent<SeesawSide>().NumValues() + leftHandSideNegative.GetComponent<SeesawSide>().NumValues();
+    }
+
+    public int RightSideNumValues()
+    {
+        return rightHandSidePositive.GetComponent<SeesawSide>().NumValues() + rightHandSideNegative.GetComponent<SeesawSide>().NumValues();
+    }
+
+    public int LeftSideNumBrackets()
+    {
+        return leftHandSidePositive.GetComponent<SeesawSide>().NumBrackets() + leftHandSideNegative.GetComponent<SeesawSide>().NumBrackets();
+    }
+
+    public int RightSideNumBrackets()
+    {
+        return rightHandSidePositive.GetComponent<SeesawSide>().NumBrackets() + rightHandSideNegative.GetComponent<SeesawSide>().NumBrackets();
+    }
+
 
 }

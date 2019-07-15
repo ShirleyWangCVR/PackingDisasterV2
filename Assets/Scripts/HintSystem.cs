@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,24 +10,32 @@ using UnityEngine.UI;
 public class HintSystem : MonoBehaviour
 {
     public Text hintText;
-    public GameObject hintBubble;
+    public Image hintBubble;
+    public SeesawController seesaw;
     
-    private string objective;
+    private string objective = "Isolate one box on one side with only toys on the other.";
     private string informhint;
-    private string overflow;
+    private string overflow = "Combine or move some terms to make more room!";
+    private string switchSign = "Switch the sign when dragging from one side to the other.";
+    private string isolateVariables = "Try moving all boxes to one side.";
+    private string isolateValues = "Try moving all toys to one side.";
+    private string combineVariables = "Try combining boxes on the same side by dragging them together."; 
+    private string combineValues = "Try combining toys on the same side by dragging them together."; 
+    private string expandBrackets = "Try expanding the brackets.";
     private string[] hints;
     private int numhints;
     private int currentIndex;
     private System.Random random;
     private Coroutine currentHint;
+    private List<string> dragLog;
     
     // Start is called before the first frame update
     void Start()
     {
-        // Set hints to be as follows.
-        objective = "Isolate one box on one side with only toys on the other.";
+        /* // Set hints to be as follows.
+        // objective = "Isolate one box on one side with only toys on the other.";
         informhint = "Tap me if you ever need a hint on what to do!";
-        overflow = "Combine or move some terms to make more room!";
+        // overflow = "Combine or move some terms to make more room!";
         hints = new string[] { "Isolate one box on one side with only toys on the other.",
                                "Anything you do to one side you should do to the other.", 
                                "Drag an item from one side to the other and switch its sign to keep the seesaw balanced.",
@@ -57,8 +66,8 @@ public class HintSystem : MonoBehaviour
         {
             numhints = 10;
         }
-
-        if (level == 3)
+ */
+        /* if (level == 3)
         {
             // inform about hint system then show objective
             currentHint = StartCoroutine(InformThenObjective());
@@ -67,7 +76,10 @@ public class HintSystem : MonoBehaviour
         {
             // show objective
             currentHint = StartCoroutine(ShowHint(objective));
-        }
+        } */
+
+        currentHint = StartCoroutine(ShowHint(objective));
+        dragLog = new List<string>();
     }
 
     // show overflow message
@@ -76,6 +88,123 @@ public class HintSystem : MonoBehaviour
         StopCoroutine(currentHint);
         currentHint = StartCoroutine(ShowHint(overflow));
     }
+
+    // show a given hint for 4 seconds before disappearing
+    public IEnumerator ShowHint(string hint)
+    {
+        hintBubble.enabled = true;
+        hintText.text = hint;
+
+        yield return new WaitForSeconds(4f);
+        hintBubble.enabled = false;
+        hintText.text = "";
+    }
+
+    // when a player has dragged
+    public void AddDragInfo(string dragData)
+    {
+        dragLog.Add(dragData);
+
+        if (dragLog.Count > 1)
+        {
+            string prevMove = dragLog[dragLog.Count - 2];
+            string currMove = dragData;
+
+            string origin1 = "";
+            string origin2 = "";
+            string dest1 = "";
+            string dest2 = "";
+            
+            // check last two drags to see if mistake or pointless
+            string[] check = prevMove.Split(new string[] { " from " }, StringSplitOptions.None);
+            if (check.Length > 1)
+            {
+                string[] check2 = check[1].Split(new string[] { " to " }, StringSplitOptions.None);
+                origin1 = check2[0];
+                dest1 = check2[1];
+            }
+
+            string[] check3 = currMove.Split(new string[] { " from " }, StringSplitOptions.None);
+            if (check3.Length > 1)
+            {
+                string[] check4 = check3[1].Split(new string[] { " to " }, StringSplitOptions.None);
+                origin2 = check4[0];
+                dest2 = check4[1];
+            }
+
+            // dragged from one side to the other without switching sign
+            if (origin2.StartsWith("R") && dest2.StartsWith("L") && ((origin2.EndsWith("Negative") && dest2.EndsWith("Negative")) || (origin2.EndsWith("Positive") && dest2.EndsWith("Positive"))))
+            {
+                if (hintText.text != switchSign)
+                {  
+                    StartCoroutine(ShowHint(switchSign));
+                }
+            }
+            else if (origin2.StartsWith("L") && dest2.StartsWith("R") && ((origin2.EndsWith("Negative") && dest2.EndsWith("Negative")) || (origin2.EndsWith("Positive") && dest2.EndsWith("Positive"))))
+            {
+                if (hintText.text != switchSign)
+                {  
+                    StartCoroutine(ShowHint(switchSign));
+                }
+            }
+            else if (origin1 == dest1 && origin2 == dest2)
+            {
+                // player maybe out of ideas, suggest a hint based on seesaw
+                InactiveForWhile();
+            }
+            // TODO: add if we can think of any other mistakes
+
+
+        }
+    }
+
+    // checks the current seesaw status and suggest a hint based on what's left
+    public void InactiveForWhile()
+    {
+        // check seesaw status and suggest hint
+        if (seesaw.LeftSideNumBrackets() > 0 || seesaw.RightSideNumBrackets() > 0)
+        {
+            StartCoroutine(ShowHint(expandBrackets));
+        }
+        else if (seesaw.LeftSideNumVariables() > 0 && seesaw.RightSideNumVariables() > 0)
+        {
+            StartCoroutine(ShowHint(isolateVariables));
+        }
+        else if (seesaw.LeftSideNumValues() > 0 && seesaw.RightSideNumValues() > 0)
+        {
+            StartCoroutine(ShowHint(isolateValues));
+        }
+        else if (seesaw.LeftSideNumVariables() > 0 || seesaw.RightSideNumVariables() > 0)
+        {
+            StartCoroutine(ShowHint(combineVariables));
+        }
+        else if (seesaw.LeftSideNumValues() > 0 || seesaw.RightSideNumValues() > 0)
+        {
+            StartCoroutine(ShowHint(combineValues));
+        }
+        // TODO: add if we can think of any other hints
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // probably not in use right now
 
     // get a random hint different from the previous
     public void GetHint()
@@ -95,7 +224,8 @@ public class HintSystem : MonoBehaviour
     // explain hint system then show objective
     public IEnumerator InformThenObjective()
     {
-        hintBubble.SetActive(true);
+        // hintBubble.SetActive(true);
+        hintBubble.enabled = true;
         hintText.text = informhint;
         Debug.Log("Part 1");
 
@@ -104,17 +234,7 @@ public class HintSystem : MonoBehaviour
         Debug.Log("Check");
         hintText.text = objective;
         yield return new WaitForSeconds(4f);
-        hintBubble.SetActive(false);
+        hintBubble.enabled = false;
+        hintText.text = "";
     }
-
-    // show a given hint for 4 seconds before disappearing
-    public IEnumerator ShowHint(string hint)
-    {
-        hintBubble.SetActive(true);
-        hintText.text = hint;
-
-        yield return new WaitForSeconds(4f);
-        hintBubble.SetActive(false);
-    }
-
 }
