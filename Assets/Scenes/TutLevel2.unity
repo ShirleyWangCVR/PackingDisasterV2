@@ -1303,6 +1303,7 @@ MonoBehaviour:
   finishedDisplayManager: {fileID: 1191794855}
   timeController: {fileID: 939469965}
   dragCounter: {fileID: 2124745085}
+  hintSystem: {fileID: 0}
   bracketPrefab: {fileID: 8234705338115385404, guid: bb422baec1401d94ab0fc205984079bd,
     type: 3}
 --- !u!1 &407301588
@@ -3239,7 +3240,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 45
+    m_FontSize: 40
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0

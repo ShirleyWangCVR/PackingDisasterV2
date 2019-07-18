@@ -177,7 +177,10 @@ public class GameController : MonoBehaviour
             inputTimer = 0;
             //Kill player or whatever
             // Debug.Log("Inactive for 5 secs");
-            hintSystem.InactiveForWhile();
+            if (hintSystem != null)
+            {
+                hintSystem.InactiveForWhile();
+            }
         }
     }
 

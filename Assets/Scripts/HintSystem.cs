@@ -12,15 +12,15 @@ public class HintSystem : MonoBehaviour
     public Text hintText;
     public Image hintBubble;
     public SeesawController seesaw;
-    
+
     private string objective = "Isolate one box on one side with only toys on the other.";
     private string informhint;
     private string overflow = "Combine or move some terms to make more room!";
     private string switchSign = "Switch the sign when dragging from one side to the other.";
     private string isolateVariables = "Try moving all boxes to one side.";
     private string isolateValues = "Try moving all toys to one side.";
-    private string combineVariables = "Try combining boxes on the same side by dragging them together."; 
-    private string combineValues = "Try combining toys on the same side by dragging them together."; 
+    private string combineVariables = "Try combining boxes on the same side by dragging them together.";
+    private string combineValues = "Try combining toys on the same side by dragging them together.";
     private string expandBrackets = "Try expanding the brackets.";
     private string[] hints;
     private int numhints;
@@ -28,7 +28,7 @@ public class HintSystem : MonoBehaviour
     private System.Random random;
     private Coroutine currentHint;
     private List<string> dragLog;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,7 +37,7 @@ public class HintSystem : MonoBehaviour
         informhint = "Tap me if you ever need a hint on what to do!";
         // overflow = "Combine or move some terms to make more room!";
         hints = new string[] { "Isolate one box on one side with only toys on the other.",
-                               "Anything you do to one side you should do to the other.", 
+                               "Anything you do to one side you should do to the other.",
                                "Drag an item from one side to the other and switch its sign to keep the seesaw balanced.",
                                "Cancel out a positive and negative on the same side by dragging one on the other.",
                                "The number in front of an object represents how many of them there are.",
@@ -46,14 +46,14 @@ public class HintSystem : MonoBehaviour
                                "Press the equals sign to do an operation to both sides.",
                                "You can't do anything to the terms inside the bracket until you expand it.",
                                "Expand the bracket by dragging its coefficient onto all coefficients inside it." };
-        
+
         currentIndex = -1;
         random = new System.Random();
         int level = FindObjectOfType<DataController>().GetDifficulty();
         if (level < 6)
         {
             numhints = 4;
-        } 
+        }
         else if (level < 11)
         {
             numhints = 7;
@@ -62,7 +62,7 @@ public class HintSystem : MonoBehaviour
         {
             numhints = 8;
         }
-        else 
+        else
         {
             numhints = 10;
         }
@@ -114,7 +114,7 @@ public class HintSystem : MonoBehaviour
             string origin2 = "";
             string dest1 = "";
             string dest2 = "";
-            
+
             // check last two drags to see if mistake or pointless
             string[] check = prevMove.Split(new string[] { " from " }, StringSplitOptions.None);
             if (check.Length > 1)
@@ -136,14 +136,14 @@ public class HintSystem : MonoBehaviour
             if (origin2.StartsWith("R") && dest2.StartsWith("L") && ((origin2.EndsWith("Negative") && dest2.EndsWith("Negative")) || (origin2.EndsWith("Positive") && dest2.EndsWith("Positive"))))
             {
                 if (hintText.text != switchSign)
-                {  
+                {
                     StartCoroutine(ShowHint(switchSign));
                 }
             }
             else if (origin2.StartsWith("L") && dest2.StartsWith("R") && ((origin2.EndsWith("Negative") && dest2.EndsWith("Negative")) || (origin2.EndsWith("Positive") && dest2.EndsWith("Positive"))))
             {
                 if (hintText.text != switchSign)
-                {  
+                {
                     StartCoroutine(ShowHint(switchSign));
                 }
             }
@@ -153,7 +153,7 @@ public class HintSystem : MonoBehaviour
                 InactiveForWhile();
             }
             // TODO: add if we can think of any other mistakes
-
+            // if moving an item to the same side different sign 
 
         }
     }
@@ -174,15 +174,17 @@ public class HintSystem : MonoBehaviour
         {
             StartCoroutine(ShowHint(isolateValues));
         }
-        else if (seesaw.LeftSideNumVariables() > 0 || seesaw.RightSideNumVariables() > 0)
+        else if (seesaw.LeftSideNumVariables() > 1 || seesaw.RightSideNumVariables() > 1)
         {
             StartCoroutine(ShowHint(combineVariables));
         }
-        else if (seesaw.LeftSideNumValues() > 0 || seesaw.RightSideNumValues() > 0)
+        else if (seesaw.LeftSideNumValues() > 1 || seesaw.RightSideNumValues() > 1)
         {
             StartCoroutine(ShowHint(combineValues));
         }
         // TODO: add if we can think of any other hints
+        // remind that box has to be Positive
+        // remind that box coefficient needs to be one
     }
 
 

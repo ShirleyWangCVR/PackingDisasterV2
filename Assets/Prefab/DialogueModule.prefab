@@ -90,6 +90,7 @@ GameObject:
   - component: {fileID: 3827346317356582223}
   - component: {fileID: 1371644634675606654}
   - component: {fileID: 1371644634675606649}
+  - component: {fileID: 8279902584182346199}
   m_Layer: 5
   m_Name: DialoguePanel
   m_TagString: Untagged
@@ -156,6 +157,18 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+--- !u!225 &8279902584182346199
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1371644634675606651}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &1371644635638889039
 GameObject:
   m_ObjectHideFlags: 0
@@ -168,6 +181,7 @@ GameObject:
   - component: {fileID: 1371644635638889027}
   - component: {fileID: 1371644635638889026}
   - component: {fileID: 1371644635638889037}
+  - component: {fileID: 5402223461589092882}
   m_Layer: 5
   m_Name: ContinueButton
   m_TagString: Untagged
@@ -288,6 +302,18 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!225 &5402223461589092882
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1371644635638889039}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 1
 --- !u!1 &1371644635839724211
 GameObject:
   m_ObjectHideFlags: 0

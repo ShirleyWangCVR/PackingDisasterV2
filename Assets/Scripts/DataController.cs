@@ -19,7 +19,7 @@ public class DataController : MonoBehaviour
     // list of all equations from the loaded json.
     private int type;
     private GameData allEquationData;
-    private int[] levelIndexes; 
+    private int[] levelIndexes;
     private int[] starsObtained;
     private int[] triedTutorial;
     private int[] tutorialStars;
@@ -182,7 +182,7 @@ public class DataController : MonoBehaviour
 
         if (level <= 2)
         {
-            SceneManager.LoadScene("TutLevel1"); 
+            SceneManager.LoadScene("TutLevel1");
         }
         else if (level <= 5)
         {
@@ -196,7 +196,7 @@ public class DataController : MonoBehaviour
         {
             SceneManager.LoadScene("MainT2");
         }
-        else 
+        else
         {
             SceneManager.LoadScene("Ending");
         }
@@ -211,12 +211,12 @@ public class DataController : MonoBehaviour
         }
     } */
 
-    
+
     // only called when completed a question
     public void SubmitNewStars(int level, int stars, bool isTut)
     {
         level = currentLevel;
-        
+
         if (isTut)
         {
             if (level <= 2)
@@ -257,7 +257,7 @@ public class DataController : MonoBehaviour
                 }
             }
         }
-        
+
         if (level <= 5)
         {
             level = 1;
@@ -278,7 +278,7 @@ public class DataController : MonoBehaviour
         {
             level = 5;
         }
-        
+
         starsObtained[level - 1] = starsObtained[level - 1] + stars;
 
         if (! isTut)
@@ -349,7 +349,7 @@ public class DataController : MonoBehaviour
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // update the player log every time a scene changes
-        
+
         if (scene.name == "Menu")
         {
             SubmitCurrentRoundData();
@@ -362,14 +362,14 @@ public class DataController : MonoBehaviour
         }
     }
 
-    // TODO: data logging method needs to be changed / updated 
+    // TODO: data logging method needs to be changed / updated
     // at the end of every round, submit current round data
     public void SubmitCurrentRoundData()
     {
         if (! submittedCurrRound)
         {
             if (currLevelData != null)
-            {   
+            {
                 playerLog.NewRoundData(currLevelData);
                 SaveCurrentPlayerData();
                 submittedCurrRound = true;
@@ -399,11 +399,16 @@ public class DataController : MonoBehaviour
     public void StoreDragData(string dragData)
     {
         currLevelData.AddDragLog(dragData);
-        FindObjectOfType<HintSystem>().AddDragInfo(dragData);
+
+        HintSystem hintSystem = FindObjectOfType<HintSystem>();
+        if (hintSystem != null)
+        {
+            hintSystem.AddDragInfo(dragData);
+        }
         FindObjectOfType<DragCounter>().DraggedOnce();
     }
 
-    
+
 
 
 
@@ -418,7 +423,7 @@ public class DataController : MonoBehaviour
 
     // methods past this point work but currently not in use
 
-    /* 
+    /*
     public int GetTotalStarsUpTo(int level)
     {
         int sum = 0;
