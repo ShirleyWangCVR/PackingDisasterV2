@@ -30,6 +30,7 @@ public class DataController : MonoBehaviour
     private string playerDataFileName;
     private PlayerMovesData currLevelData;
     private bool submittedCurrRound;
+    private int prevStars;
 
     // Player Progress used to store between sessions. Currently not in use.
     // private PlayerProgress playerProgress;
@@ -202,15 +203,7 @@ public class DataController : MonoBehaviour
         }
     }
 
-    /* // TODO: stars meter now different
-    public void SetNewStars(int level, int stars)
-    {
-        if (starsObtained[level - 1] < stars)
-        {
-            starsObtained[level - 1] = stars;
-        }
-    } */
-
+    
 
     // only called when completed a question
     public void SubmitNewStars(int level, int stars, bool isTut)
@@ -257,6 +250,16 @@ public class DataController : MonoBehaviour
                 }
             }
         }
+        else
+        {
+            int previousStars = prevStars;
+            prevStars = stars;
+            stars = stars - previousStars;
+            if (stars < 0)
+            {
+                stars = 0;
+            }
+        }
 
         if (level <= 5)
         {
@@ -281,15 +284,6 @@ public class DataController : MonoBehaviour
 
         starsObtained[level - 1] = starsObtained[level - 1] + stars;
 
-        if (! isTut)
-        {
-            levelIndexes[level - 1]++;
-            if (levelIndexes[level - 1] == 4) // TODO: capped at 4 because only 4 equations mostly, eventually up to 10 once json is updated
-            {
-                levelIndexes[level - 1] = 0;
-            }
-        }
-
         if (starsObtained[level - 1] >= 15)
         {
             starsObtained[level - 1] = 15;
@@ -297,6 +291,19 @@ public class DataController : MonoBehaviour
             {
                 type++;
             }
+        }
+    }
+
+    public void GoToNextIndex(bool isTut, int level)
+    {
+        if (! isTut)
+        {
+            levelIndexes[level - 1]++;
+            if (levelIndexes[level - 1] == 4) // TODO: capped at 4 because only 4 equations mostly, eventually up to whatever's in the json
+            {
+                levelIndexes[level - 1] = 0;
+            }
+            prevStars = 0;
         }
     }
 
@@ -422,6 +429,15 @@ public class DataController : MonoBehaviour
 
 
     // methods past this point work but currently not in use
+
+    /* public void SetNewStars(int level, int stars)
+    {
+        if (starsObtained[level - 1] < stars)
+        {
+            starsObtained[level - 1] = stars;
+        }
+    } */
+
 
     /*
     public int GetTotalStarsUpTo(int level)

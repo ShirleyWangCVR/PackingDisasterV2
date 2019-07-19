@@ -25,25 +25,28 @@ public class GameController : MonoBehaviour
     protected bool isTutorial;
     protected bool roundActive;
     protected int level;
+    protected int gameLevel;
     protected float inputTimer;
+    protected bool won;
 
     // Start is called before the first frame update
     void Start()
     {
         // get data from dataController
         dataController = FindObjectOfType<DataController>();
-        level = dataController.GetDifficulty();
-        equation = dataController.GetCurrentEquationData(level);
-        isTutorial = level <= 2 || level == 6 || level == 11 || level == 16;
+        gameLevel = dataController.GetDifficulty();
+        equation = dataController.GetCurrentEquationData(gameLevel);
+        isTutorial = gameLevel <= 2 || gameLevel == 6 || gameLevel == 11 || gameLevel == 16;
         inputTimer = 0;
+        won = false;
 
-        if (level <= 5)
+        if (gameLevel <= 5)
         {
             level = 1;
         }
         else
         {
-            level = level / 5 + level % 5;
+            level = gameLevel / 5 + gameLevel % 5;
         }
 
         levelText.text = "Level " + level.ToString(); // TODO: what to do about level
@@ -206,9 +209,10 @@ public class GameController : MonoBehaviour
                     stars = timeController.FinishedGameGetStars();
                     stars = stars + dragCounter.GetStars();
                     stars = stars + 1;
-                    Debug.Log("In Game Controller about to call SubmitNewStars");
+
                     dataController.SubmitNewStars(level, stars, isTutorial);
-                    Debug.Log("SubmitNewStars called");
+                    won = true;
+
                     done = true;
                     finishedDisplayManager.DisplayCorrectlyBalanced(equation.variableValue, timeController.FinishedGameGetStars(), dragCounter.GetStars());
                 }
@@ -216,14 +220,6 @@ public class GameController : MonoBehaviour
                 {
                     // lost because wrong answer, get whatever they answered
                     finishedDisplayManager.DisplayWrongBalanced();
-                    /* int side = (int) seesaw.GetComponent<SeesawController>().GetLeftHandSideValue();
-                    if (equation.variableValue != side)
-                    {
-                        finishedDisplayManager.DisplayWrongBalanced();
-                    } else {
-                        side = (int) seesaw.GetComponent<SeesawController>().GetRightHandSideValue();
-                        finishedDisplayManager.DisplayWrongBalanced();
-                    } */
                     done = false;
                     reason = "Incorrect Value";
                 }
@@ -266,30 +262,15 @@ public class GameController : MonoBehaviour
     public void TryAgain()
     {
         // restart scene with the same equation
-        dataController.StartLevel(level);
+        dataController.StartLevel(gameLevel);
     }
-
-    // move onto next question
-    /* public void NextQuestion()
-    {
-        // tell DataController to move to next question and then load main scene again
-        if (level > dataController.GetLevelsCompleted())
-        {
-            dataController.SetLevelsCompleted(level);
-        }
-
-        if (level % 5 == 0 && level < 25)
-        {
-            SceneManager.LoadScene("Level Select");
-        }
-        else
-        {
-            dataController.StartLevel(level + 1);
-        }
-    } */
 
     public void BackToLevelSelect()
     {
+        if (won)
+        {
+            dataController.GoToNextIndex(isTutorial, level);
+        }
         SceneManager.LoadScene("Level Select");
     }
 }
