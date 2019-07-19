@@ -39,4 +39,9 @@ public class MenuController : MonoBehaviour
     {
         SceneManager.LoadScene("Level Select");
     }
+
+    public void ReviewTopics()
+    {
+        SceneManager.LoadScene("Review");
+    }
 }

@@ -31,6 +31,8 @@ public class DataController : MonoBehaviour
     private PlayerMovesData currLevelData;
     private bool submittedCurrRound;
     private int prevStars;
+    private string currentProblemArea; // TODO: Am i using this?????
+    private string[] prevScenes;
 
     // Player Progress used to store between sessions. Currently not in use.
     // private PlayerProgress playerProgress;
@@ -45,8 +47,9 @@ public class DataController : MonoBehaviour
         // LoadPlayerProgress();
         SceneManager.LoadScene("Menu");
         currentLevel = 1;
-        // levelsCompleted = 0;
         type = 1;
+        currentProblemArea = "";
+        prevScenes = new string[2];
 
         playerDataFileName = "playerData" + Directory.GetFiles(Application.streamingAssetsPath, "*.json").Length.ToString() + ".json";
 
@@ -203,8 +206,6 @@ public class DataController : MonoBehaviour
         }
     }
 
-    
-
     // only called when completed a question
     public void SubmitNewStars(int level, int stars, bool isTut)
     {
@@ -337,6 +338,16 @@ public class DataController : MonoBehaviour
         type = newType;
     }
 
+    public string GetProblemArea()
+    {
+        return currentProblemArea;
+    }
+
+    public void SetProblemArea(string problem)
+    {
+        currentProblemArea = problem;
+    }
+
     // load game data from json
     private void LoadGameData()
     {
@@ -353,9 +364,16 @@ public class DataController : MonoBehaviour
         }
     }
 
+    public string GetPreviousScene()
+    {
+        return prevScenes[0];
+    }
+
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // update the player log every time a scene changes
+        prevScenes[0] = prevScenes[1];
+        prevScenes[1] = scene.name;
 
         if (scene.name == "Menu")
         {

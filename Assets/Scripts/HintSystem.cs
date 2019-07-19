@@ -29,6 +29,8 @@ public class HintSystem : MonoBehaviour
     private Coroutine currentHint;
     private List<string> dragLog;
 
+    private string problemArea; // TODO: set this based off of what mistakes or things they've struggled at
+
     // Start is called before the first frame update
     void Start()
     {
@@ -67,18 +69,7 @@ public class HintSystem : MonoBehaviour
             numhints = 10;
         }
  */
-        /* if (level == 3)
-        {
-            // inform about hint system then show objective
-            currentHint = StartCoroutine(InformThenObjective());
-        }
-        else
-        {
-            // show objective
-            currentHint = StartCoroutine(ShowHint(objective));
-        } */
-
-        currentHint = StartCoroutine(ShowHint(objective));
+        // currentHint = StartCoroutine(ShowHint(objective));
         dragLog = new List<string>();
     }
 
@@ -150,10 +141,11 @@ public class HintSystem : MonoBehaviour
             else if (origin1 == dest1 && origin2 == dest2)
             {
                 // player maybe out of ideas, suggest a hint based on seesaw
+                // make sure this isn't due to dragging due to expanding bracket
                 InactiveForWhile();
             }
             // TODO: add if we can think of any other mistakes
-            // if moving an item to the same side different sign 
+            // if moving an item to the same side different sign
 
         }
     }
@@ -185,6 +177,32 @@ public class HintSystem : MonoBehaviour
         // TODO: add if we can think of any other hints
         // remind that box has to be Positive
         // remind that box coefficient needs to be one
+    }
+
+    public string GetProblemArea()
+    {
+        // TODO: calculate what's the biggest problem area in the case of them solving the problem correctly
+
+        if (true)
+        {
+            // brackets not expanding enough
+            return "moving from one side to the other";
+        }
+        else if (true)
+        {
+            // dragging and not switching sign
+            return "expanding brackets";
+        }
+        else if (true)
+        {
+            // review coefficients? This one's probably arbitrary
+                // present it a few times if no other problems and if they don't use it
+                // after a few times just stop i guess
+                // or just randomly 1 / 3???
+            return "coefficients";
+        }
+
+        return "";
     }
 
 

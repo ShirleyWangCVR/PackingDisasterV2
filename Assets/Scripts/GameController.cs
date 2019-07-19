@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 /* Game Controller for the main scene where the question is solved.
- * Mainly used for Type 1 questions.
+ * Used for Type 1 questions.
  */
 public class GameController : MonoBehaviour
 {
@@ -49,7 +49,7 @@ public class GameController : MonoBehaviour
             level = gameLevel / 5 + gameLevel % 5;
         }
 
-        levelText.text = "Level " + level.ToString(); // TODO: what to do about level
+        levelText.text = "Stage " + level.ToString(); // TODO: what to do about level
         currentlyDragging = false;
         roundActive = true;
 
@@ -172,13 +172,11 @@ public class GameController : MonoBehaviour
         {
             //Reset the timer
             inputTimer = 0;
-            //Do player action
         }
-        //5 seconds or anything you want, I would turn that into a public field so you can change it from the inspector
-        if(inputTimer >= 5f)
+
+        if(inputTimer >= 5f) // time of inactivity
         {
             inputTimer = 0;
-            //Kill player or whatever
             // Debug.Log("Inactive for 5 secs");
             if (hintSystem != null)
             {
@@ -196,7 +194,6 @@ public class GameController : MonoBehaviour
         // deactivate game logic
         roundActive = false;
         seesaw.GetComponent<SeesawController>().SetRoundActive(false);
-
         int stars = 0;
         float time = timeController.GetCurrentTime();
 
@@ -215,6 +212,12 @@ public class GameController : MonoBehaviour
 
                     done = true;
                     finishedDisplayManager.DisplayCorrectlyBalanced(equation.variableValue, timeController.FinishedGameGetStars(), dragCounter.GetStars());
+
+                    if (hintSystem != null)
+                    {
+                        string problemArea = hintSystem.GetProblemArea();
+                        finishedDisplayManager.SetProblemArea(problemArea);
+                    }
                 }
                 else
                 {
@@ -222,6 +225,7 @@ public class GameController : MonoBehaviour
                     finishedDisplayManager.DisplayWrongBalanced();
                     done = false;
                     reason = "Incorrect Value";
+                    finishedDisplayManager.SetProblemArea("operations on both sides");
                 }
             }
             else
@@ -229,12 +233,15 @@ public class GameController : MonoBehaviour
                 finishedDisplayManager.DisplayNotYetBalanced();
                 done = false;
                 reason = "Not Isolated";
+
+                finishedDisplayManager.SetProblemArea("how to solve an equation");
             }
         } else if (howEnded == "Scale Tipped")
         {
             finishedDisplayManager.DisplaySeesawTipped();
             done = false;
             reason = "Seesaw Tipped Over";
+            finishedDisplayManager.SetProblemArea("moving from one side to the other");
         }
 
         dataController.StoreEndRoundData(time, done, stars, reason);

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 /* Game Controller for the main scene where the question is solved.
+ * For T2 questions in MainT2.
  */
 public class T2GameController : GameController
 {
@@ -14,28 +15,29 @@ public class T2GameController : GameController
     // Start is called before the first frame update
     void Start()
     {
-        // get data from dataController
         dataController = FindObjectOfType<DataController>();
-        level = dataController.GetDifficulty();
-        equation = dataController.GetCurrentEquationData(level);
-        isTutorial = level <= 2 || level == 6 || level == 11 || level == 16;
+        gameLevel = dataController.GetDifficulty();
+        equation = dataController.GetCurrentEquationData(gameLevel);
+        isTutorial = gameLevel <= 2 || gameLevel == 6 || gameLevel == 11 || gameLevel == 16;
+        inputTimer = 0;
+        won = false;
 
-        if (level < 11)
+        if (gameLevel < 11)
         {
             BothSideOperations bso = FindObjectOfType<BothSideOperations>();
             bso.gameObject.SetActive(false);
         }
 
-        if (level <= 5)
+        if (gameLevel <= 5)
         {
             level = 1;
         }
         else
         {
-            level = level / 5 + level % 5;
+            level = gameLevel / 5 + gameLevel % 5;
         }
 
-        levelText.text = "Level " + level.ToString(); // TODO: what to do about level
+        levelText.text = "Stage " + level.ToString();
         currentlyDragging = false;
         roundActive = true;
 

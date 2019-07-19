@@ -21,4 +21,6 @@ public class EarlyTutorialControl : MonoBehaviour
             }
         }
     }
+
+    // if we have skipped tutorials reactivate the drawers
 }

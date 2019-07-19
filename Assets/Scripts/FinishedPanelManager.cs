@@ -13,13 +13,16 @@ public class FinishedPanelManager : MonoBehaviour
     public GameObject boxDisplay;
     public GameObject toyDisplay;
     public SimpleObjectPool toyPool;
-    public DataController dataController;
     public AudioClip youWinSfx;
     public AudioClip youLoseSfx;
     public Image[] starsDisplay;
     public Sprite fullStar;
+    public GameObject reviewBubble;
+    public Text reviewDialogue;
+    public GameObject reviewButton;
 
     private AudioSource audioSource;
+    private DataController dataController;
 
     void Start()
     {
@@ -47,7 +50,7 @@ public class FinishedPanelManager : MonoBehaviour
         finishedDisplay.transform.Find("Question").gameObject.SetActive(false);
 
         if (dataController.GetDifficulty() < 6)
-        {        
+        {
             if (correctValue > 0)
             {
                 for (int i = 0; i < correctValue; i++)
@@ -56,7 +59,7 @@ public class FinishedPanelManager : MonoBehaviour
                     toy.transform.SetParent(toyDisplay.transform);
                     toy.GetComponent<Draggable>().ShowOnPositiveSide();
                 }
-            }  
+            }
             else if (correctValue < 0)
             {
                 for (int i = 0; i < 0 - correctValue; i++)
@@ -66,12 +69,12 @@ public class FinishedPanelManager : MonoBehaviour
 
                     toy.GetComponent<Draggable>().ShowOnNegativeSide();
                 }
-            }     
-        } 
+            }
+        }
         else
         {
             Destroy(toyDisplay.GetComponent<GridLayoutGroup>());
-            
+
             GameObject toy = toyPool.GetObject();
             toy.transform.localScale = 2 * toy.transform.localScale;
             toy.transform.SetParent(toyDisplay.transform);
@@ -81,7 +84,7 @@ public class FinishedPanelManager : MonoBehaviour
             {
                 toy.GetComponent<Draggable>().ShowOnPositiveSide();
             }
-            else 
+            else
             {
                 toy.GetComponent<Draggable>().ShowOnNegativeSide();
             }
@@ -92,7 +95,7 @@ public class FinishedPanelManager : MonoBehaviour
     public void DisplayWrongBalanced()
     {
         audioSource.PlayOneShot(youLoseSfx, 0.7f);
-        
+
         finishedDisplay.SetActive(true);
         userMessage.text = "Try Again! Make Sure the Seesaw is Balanced.";
     }
@@ -101,7 +104,7 @@ public class FinishedPanelManager : MonoBehaviour
     public void DisplayNotYetBalanced()
     {
         audioSource.PlayOneShot(youLoseSfx, 0.7f);
-        
+
         finishedDisplay.SetActive(true);
         userMessage.text = "Try Again! Remember To Simplify As Much As You Can.";
     }
@@ -110,9 +113,22 @@ public class FinishedPanelManager : MonoBehaviour
     public void DisplaySeesawTipped()
     {
         audioSource.PlayOneShot(youLoseSfx, 0.7f);
-        
+
         finishedDisplay.SetActive(true);
         userMessage.text = "The Seesaw Tipped Over! Try Again!";
+    }
+
+    public void SetProblemArea(string problemArea)
+    {
+        reviewBubble.SetActive(true);
+        reviewDialogue.text = "Do you want to review " + problemArea + "?";
+        reviewButton.SetActive(true);
+        dataController.SetProblemArea(problemArea);
+    }
+
+    public void GoToReview()
+    {
+        SceneManager.LoadScene("Review");
     }
 
 }
