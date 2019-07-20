@@ -6,15 +6,14 @@ using UnityEngine.UI;
 
 /* A basic hint system for the game.
  */
-
 public class HintSystem : MonoBehaviour
 {
     public Text hintText;
     public Image hintBubble;
     public SeesawController seesaw;
 
-    private string objective = "Isolate one box on one side with only toys on the other.";
-    private string informhint;
+    // private string objective = "Isolate one box on one side with only toys on the other.";
+    // private string informhint;
     private string overflow = "Combine or move some terms to make more room!";
     private string switchSign = "Switch the sign when dragging from one side to the other.";
     private string isolateVariables = "Try moving all boxes to one side.";
@@ -22,14 +21,12 @@ public class HintSystem : MonoBehaviour
     private string combineVariables = "Try combining boxes on the same side by dragging them together.";
     private string combineValues = "Try combining toys on the same side by dragging them together.";
     private string expandBrackets = "Try expanding the brackets.";
-    private string[] hints;
+    // private string[] hints;
     private int numhints;
     private int currentIndex;
     private System.Random random;
     private Coroutine currentHint;
     private List<string> dragLog;
-
-    private string problemArea; // TODO: set this based off of what mistakes or things they've struggled at
 
     // Start is called before the first frame update
     void Start()
@@ -95,6 +92,9 @@ public class HintSystem : MonoBehaviour
     public void AddDragInfo(string dragData)
     {
         dragLog.Add(dragData);
+        Debug.Log(dragData);
+
+        // Bracket Coefficient dragged onto Bracket Inside Term 1 / 2
 
         if (dragLog.Count > 1)
         {
@@ -226,6 +226,7 @@ public class HintSystem : MonoBehaviour
 
     // probably not in use right now
 
+    /*
     // get a random hint different from the previous
     public void GetHint()
     {
@@ -257,4 +258,5 @@ public class HintSystem : MonoBehaviour
         hintBubble.enabled = false;
         hintText.text = "";
     }
+    */
 }

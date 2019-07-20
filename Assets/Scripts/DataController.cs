@@ -31,7 +31,7 @@ public class DataController : MonoBehaviour
     private PlayerMovesData currLevelData;
     private bool submittedCurrRound;
     private int prevStars;
-    private string currentProblemArea; // TODO: Am i using this?????
+    private string currentProblemArea; 
     private string[] prevScenes;
 
     // Player Progress used to store between sessions. Currently not in use.
