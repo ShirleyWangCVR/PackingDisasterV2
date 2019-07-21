@@ -28,6 +28,7 @@ public class GameController : MonoBehaviour
     protected int gameLevel;
     protected float inputTimer;
     protected bool won;
+    protected int numInitialBrackets;
 
     // Start is called before the first frame update
     void Start()
@@ -49,12 +50,18 @@ public class GameController : MonoBehaviour
             level = gameLevel / 5 + gameLevel % 5;
         }
 
-        levelText.text = "Stage " + level.ToString(); // TODO: what to do about level
+        levelText.text = "Stage " + level.ToString();
         currentlyDragging = false;
         roundActive = true;
 
         // set up seesaw according to equation
         SetUpSeesaw();
+        numInitialBrackets = 0;
+    }
+
+    public int GetInitialBrackets()
+    {
+        return numInitialBrackets;
     }
 
     public EquationData GetEquation()

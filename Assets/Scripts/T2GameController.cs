@@ -43,6 +43,7 @@ public class T2GameController : GameController
 
         // set up seesaw according to equation
         SetUpSeesaw();
+        numInitialBrackets = equation.lhs.numBrackets + equation.rhs.numBrackets;
     }
 
     // set up the seesaw according to the equation data
