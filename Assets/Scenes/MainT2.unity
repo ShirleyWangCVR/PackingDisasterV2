@@ -1057,6 +1057,7 @@ MonoBehaviour:
   hintText: {fileID: 52595972}
   hintBubble: {fileID: 0}
   seesaw: {fileID: 0}
+  gameController: {fileID: 0}
 --- !u!1 &275404375
 GameObject:
   m_ObjectHideFlags: 0
@@ -5577,6 +5578,7 @@ MonoBehaviour:
   hintText: {fileID: 52595972}
   hintBubble: {fileID: 1369664226}
   seesaw: {fileID: 732550610}
+  gameController: {fileID: 362771283}
 --- !u!1 &1431309529
 GameObject:
   m_ObjectHideFlags: 0

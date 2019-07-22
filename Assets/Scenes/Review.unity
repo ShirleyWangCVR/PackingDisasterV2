@@ -294,10 +294,10 @@ RectTransform:
   m_Father: {fileID: 1695077201}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -0.0000076293945}
+  m_SizeDelta: {x: 600, y: 350}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &115149391
 CanvasGroup:
@@ -331,8 +331,8 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: cc37e8ec71d9039409baddbb08685fc9, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -772,7 +772,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b462024a0870db947a8c5a33adecffec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reviewImage: {fileID: 0}
+  reviewImage: {fileID: 21300000, guid: 1995564c26eb4ef4fb0f15c16747eb43, type: 3}
 --- !u!114 &302341895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -939,7 +939,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 185}
-  m_SizeDelta: {x: 300, y: 50}
+  m_SizeDelta: {x: 300, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &320170901
 MonoBehaviour:
@@ -1314,7 +1314,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b462024a0870db947a8c5a33adecffec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reviewImage: {fileID: 0}
+  reviewImage: {fileID: 21300000, guid: 6d23e98d21f7f944a8291be23d496dd6, type: 3}
 --- !u!114 &494070790
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1422,7 +1422,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b462024a0870db947a8c5a33adecffec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reviewImage: {fileID: 0}
+  reviewImage: {fileID: 21300000, guid: 9a07e69f0defb07409d1a3bf9d1a1b6f, type: 3}
 --- !u!114 &494884007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1625,7 +1625,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b462024a0870db947a8c5a33adecffec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reviewImage: {fileID: 0}
+  reviewImage: {fileID: 21300000, guid: 109b2e7410710cd4c9fd7e730b8c71c9, type: 3}
 --- !u!114 &556823263
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1976,7 +1976,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b462024a0870db947a8c5a33adecffec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reviewImage: {fileID: 0}
+  reviewImage: {fileID: 21300000, guid: cc37e8ec71d9039409baddbb08685fc9, type: 3}
 --- !u!114 &774776983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2317,7 +2317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b462024a0870db947a8c5a33adecffec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reviewImage: {fileID: 0}
+  reviewImage: {fileID: 21300000, guid: ef17e76daaf59c546be30b2e4cbdae4f, type: 3}
 --- !u!114 &1049092728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2445,7 +2445,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Dragging Items
+  m_Text: Moving Items
 --- !u!222 &1123478315
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2615,7 +2615,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b462024a0870db947a8c5a33adecffec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reviewImage: {fileID: 0}
+  reviewImage: {fileID: 21300000, guid: 03ea1dac5275710428b3c398c5981cc5, type: 3}
 --- !u!114 &1266163742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2723,7 +2723,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b462024a0870db947a8c5a33adecffec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reviewImage: {fileID: 0}
+  reviewImage: {fileID: 21300000, guid: fa7046f39b64e9640ad3311c1715a395, type: 3}
 --- !u!114 &1335547367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2980,11 +2980,11 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: 234b679e9d5873d45a3ab7876a918648, type: 3}
-    m_FontSize: 35
+    m_FontSize: 50
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 2
-    m_MaxSize: 40
+    m_MaxSize: 50
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -3407,7 +3407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b462024a0870db947a8c5a33adecffec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reviewImage: {fileID: 0}
+  reviewImage: {fileID: 21300000, guid: 204e19c27cc81bb4c813f38610a34b48, type: 3}
 --- !u!114 &1722255903
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3646,7 +3646,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b462024a0870db947a8c5a33adecffec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reviewImage: {fileID: 0}
+  reviewImage: {fileID: 21300000, guid: df102e81f093e4c42ad5f3ba6eb9be17, type: 3}
 --- !u!114 &1959688242
 MonoBehaviour:
   m_ObjectHideFlags: 0

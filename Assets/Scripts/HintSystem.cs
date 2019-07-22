@@ -35,7 +35,7 @@ public class HintSystem : MonoBehaviour
     {
         dragLog = new List<string>();
         numBrackets = gameController.GetInitialBrackets();
-        random = new Random();
+        random = new System.Random();
     }
 
     // show overflow message
@@ -156,7 +156,7 @@ public class HintSystem : MonoBehaviour
         {
             StartCoroutine(ShowHint(combineValues));
         }
-        else if (seesaw.NumNegativeValues() > 0)
+        else if (seesaw.NumNegativeVariables() > 0)
         {
             StartCoroutine(ShowHint(boxPositive));
         }

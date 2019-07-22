@@ -88,7 +88,7 @@ public class LevelSelectController : MonoBehaviour
                     tutorialButtons[i + 1].transform.Find("Stars").gameObject.SetActive(false);
                 }
             }
-        }
+        } 
     }
 
     public void StartLevel(int level)

@@ -38,9 +38,8 @@ public class SimpleObjectPool : MonoBehaviour
         // enable the instance
         spawnedGameObject.SetActive(true);
         spawnedGameObject.transform.SetParent(canvas.transform);
-        spawnedGameObject.transform.Find("Image").localScale = new Vector3(1, 1, 1);
-        spawnedGameObject.transform.Find("Image").gameObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
-        
+        spawnedGameObject.GetComponent<Draggable>().ShowOnPositiveSide();
+                
         spawnedGameObject.GetComponent<CanvasGroup>().blocksRaycasts = true;
 
         // return a reference to the instance

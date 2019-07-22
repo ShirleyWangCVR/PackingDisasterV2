@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /* GameObjects with this class are Draggable, and can be dragged by
- * the mouse.  They can be Variables, Values, Brackets, or Dummys.
+ * the mouse. They can be Variables, Values, Brackets, or Dummys.
  */
 public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
