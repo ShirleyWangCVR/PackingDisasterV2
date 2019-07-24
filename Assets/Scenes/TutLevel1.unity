@@ -5141,11 +5141,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueSentences:
   - It's a disaster!  I lost the record detailing how many toys are in each box!
-  - If we can isolate one box on one side with only toys on the other, then we can
+  - If we can isolate one box on one side with only bearss on the other, then we can
     figure out how many toys are in the box!
   - You can move an item from one side of the seesaw to the other by dragging it.
   - You can get more items from the drawers, or put them away in the drawers.
-  - Try taking away one toy from both sides of the seesaw.
+  - Take away one bear from both sides of the seesaw.
   tutManager: {fileID: 2065705612}
 --- !u!4 &1666044030
 Transform:
