@@ -13,6 +13,7 @@ public class ReviewScreenController : MonoBehaviour
 
     private DataController dataController;
     private string problemArea;
+    private bool open;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +26,7 @@ public class ReviewScreenController : MonoBehaviour
             Debug.Log(problemArea);
             if (problemArea != "")
             {
+                open = true;
                 if (problemArea == "operations on both sides")
                 {
                     ShowImage(topics[2].reviewImage, topics[2].gameObject.transform.Find("Text").gameObject.GetComponent<Text>().text);
@@ -39,7 +41,7 @@ public class ReviewScreenController : MonoBehaviour
                 }
                 else if (problemArea == "expanding brackets")
                 {
-                    ShowImage(topics[9].reviewImage, topics[9].gameObject.transform.Find("Text").gameObject.GetComponent<Text>().text);
+                    ShowImage(topics[9].reviewImage, topics[10].gameObject.transform.Find("Text").gameObject.GetComponent<Text>().text);
                 }
                 else if (problemArea == "coefficients")
                 {
@@ -47,6 +49,10 @@ public class ReviewScreenController : MonoBehaviour
                 }
 
                 dataController.SetProblemArea("");
+            }
+            else
+            {
+                open = false;
             }
 
             // get current level and set sprite = locked, Text.SetActive(false), set locked
@@ -66,13 +72,13 @@ public class ReviewScreenController : MonoBehaviour
             }
             else
             {
-                bound = 10;
+                bound = 11;
             }
 
             for (int i = 0; i < topics.Length; i++)
             {
                 topics[i].SetUnlocked(true);
-                /*
+                
                 if (i < bound)
                 {
                     topics[i].SetUnlocked(true);
@@ -82,8 +88,8 @@ public class ReviewScreenController : MonoBehaviour
                     topics[i].SetUnlocked(false);
                     topics[i].gameObject.transform.Find("Image").gameObject.GetComponent<Image>().sprite = locked;
                     topics[i].gameObject.transform.Find("Text").gameObject.GetComponent<Text>().text = "";
-                }
-                */
+                } 
+                
             }
         }
     }
@@ -93,26 +99,37 @@ public class ReviewScreenController : MonoBehaviour
         imageToShow.SetActive(true);
         imageToShow.GetComponent<Image>().sprite = image;
         title.text = topicName;
+        open = true;
     }
 
     public void CloseImage()
     {
         imageToShow.SetActive(false);
         title.text = "Review";
+        open = false;
     }
 
     public void Back()
     {
-        // start either level select or main menu depending on if they pressed
-        // it from the menu or from end of a level
-        string name = dataController.GetPreviousScene();
-        if (name == "Menu")
+        if (open)
         {
-            SceneManager.LoadScene("Menu");
+            CloseImage();
         }
         else
         {
-            SceneManager.LoadScene("Level Select");
+            // start either level select or main menu depending on if they pressed
+            // it from the menu or from end of a level
+            string name = dataController.GetPreviousScene();
+            if (name == "Menu")
+            {
+                SceneManager.LoadScene("Menu");
+            }
+            else
+            {
+                SceneManager.LoadScene("Level Select");
+            }
         }
+        
+        
     }
 }

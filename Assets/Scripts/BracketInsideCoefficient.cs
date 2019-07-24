@@ -28,6 +28,10 @@ public class BracketInsideCoefficient : MonoBehaviour, IDropHandler
                 bracket.TermDroppedOn();
                 bracket.Invoke("CheckExpanded", 1f);
             }
+            else
+            {
+                bracket.TermDroppedOn(false);
+            }
         }
     }
 }

@@ -464,9 +464,8 @@ public class SeesawController : MonoBehaviour
         return leftHandSideNegative.GetComponent<SeesawSide>().NumVariables() + rightHandSideNegative.GetComponent<SeesawSide>().NumVariables();
     }
 
-    public double NumericalVariables()
+    public double CoefficientVariables()
     {
-        return leftHandSidePositive.GetComponent<SeesawSide>().NumericalVariables() + rightHandSidePositive.GetComponent<SeesawSide>().NumericalVariables();
+        return leftHandSidePositive.GetComponent<SeesawSide>().CoefficientVariables() + rightHandSidePositive.GetComponent<SeesawSide>().CoefficientVariables();
     }
-
 }

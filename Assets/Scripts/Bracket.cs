@@ -75,78 +75,82 @@ public class Bracket : MonoBehaviour
     }
 
     // when a term has been dropped on it react accordingly
-    public void TermDroppedOn()
+    public void TermDroppedOn(bool alreadyDropped = true)
     {
-        numDroppedOn++;
-        // Debug.Log(numDroppedOn);
         string dragData = "Bracket Coefficient dragged onto Bracket Inside Term " + numDroppedOn.ToString();
         dataController.StoreDragData(dragData);
-
-        if (numDroppedOn == numTerms)
+        
+        
+        if (alreadyDropped)
         {
-            // we have successfully expanded the bracket
-            Debug.Log("Expanded");
-            soundEffects.PlayExpanded();
+            numDroppedOn++;
 
-            int i = 0;
-            int numChildren = this.gameObject.transform.Find("TermsInBracket").childCount;
-            while (i < numChildren)
+            if (numDroppedOn == numTerms)
             {
-                Transform child = this.gameObject.transform.Find("TermsInBracket").GetChild(i);
+                // we have successfully expanded the bracket
+                Debug.Log("Expanded");
+                soundEffects.PlayExpanded();
 
-                // multiply out coefficients
-                Coefficient coef = child.Find("Coefficient").gameObject.GetComponent<Coefficient>();
-                Fraction newCoef = coef.GetFractionValue() * this.gameObject.transform.Find("Coefficient").gameObject.GetComponent<Coefficient>().GetFractionValue();
-                coef.SetValue(newCoef);
+                int i = 0;
+                int numChildren = this.gameObject.transform.Find("TermsInBracket").childCount;
+                while (i < numChildren)
+                {
+                    Transform child = this.gameObject.transform.Find("TermsInBracket").GetChild(i);
 
-                // reset as draggable
-                // child.gameObject.GetComponent<Draggable>().SetBracketStatus(false);
-                Destroy(child.gameObject.transform.Find("Coefficient").GetComponent<BracketInsideCoefficient>());
+                    // multiply out coefficients
+                    Coefficient coef = child.Find("Coefficient").gameObject.GetComponent<Coefficient>();
+                    Fraction newCoef = coef.GetFractionValue() * this.gameObject.transform.Find("Coefficient").gameObject.GetComponent<Coefficient>().GetFractionValue();
+                    coef.SetValue(newCoef);
 
-                i++;
-            }
+                    // reset as draggable
+                    // child.gameObject.GetComponent<Draggable>().SetBracketStatus(false);
+                    Destroy(child.gameObject.transform.Find("Coefficient").GetComponent<BracketInsideCoefficient>());
 
-            // update arrows
-            Coefficient coeff = this.gameObject.transform.Find("Coefficient").gameObject.GetComponent<Coefficient>();
+                    i++;
+                }
 
-            arrow1.gameObject.SetActive(true);
-            arrow1.sprite = solidArrow;
-            arrow1Text.SetActive(true);
-            arrow1Text.transform.Find("Text").gameObject.GetComponent<Text>().text = coeff.GetValue().ToString() + "x";
+                // update arrows
+                Coefficient coeff = this.gameObject.transform.Find("Coefficient").gameObject.GetComponent<Coefficient>();
 
-            arrow2.gameObject.SetActive(true);
-            arrow2.gameObject.GetComponent<Image>().sprite = solidArrow;
-            arrow2Text.SetActive(true);
-            arrow2Text.transform.Find("Text").gameObject.GetComponent<Text>().text = coeff.GetValue().ToString() + "x";
-
-            coeff.SetValue(1);
-            expanded = true;
-        }
-        else // first drop
-        {
-            soundEffects.PlayOneDragged();
-            
-            // show the arrows
-            double coef = this.transform.Find("Coefficient").gameObject.GetComponent<Coefficient>().GetValue();
-            if (this.transform.Find("TermsInBracket").GetChild(0).Find("Coefficient").gameObject.GetComponent<BracketInsideCoefficient>().droppedOn)
-            {
-                // first item in bracket was dropped on
                 arrow1.gameObject.SetActive(true);
                 arrow1.sprite = solidArrow;
                 arrow1Text.SetActive(true);
-                arrow1Text.transform.Find("Text").gameObject.GetComponent<Text>().text = coef.ToString() + "x";
+                arrow1Text.transform.Find("Text").gameObject.GetComponent<Text>().text = coeff.GetValue().ToString() + "x";
 
                 arrow2.gameObject.SetActive(true);
-                arrow2.gameObject.GetComponent<Image>().sprite = dashedArrow;
-            } else
-            {
-                arrow2.gameObject.SetActive(true);
-                arrow2.sprite = solidArrow;
+                arrow2.gameObject.GetComponent<Image>().sprite = solidArrow;
                 arrow2Text.SetActive(true);
-                arrow2Text.transform.Find("Text").gameObject.GetComponent<Text>().text = coef.ToString() + "x";
+                arrow2Text.transform.Find("Text").gameObject.GetComponent<Text>().text = coeff.GetValue().ToString() + "x";
 
-                arrow1.gameObject.SetActive(true);
-                arrow1.gameObject.GetComponent<Image>().sprite = dashedArrow;
+                coeff.SetValue(1);
+                expanded = true;
+            }
+            else // first drop
+            {
+                soundEffects.PlayOneDragged();
+                
+                // show the arrows
+                double coef = this.transform.Find("Coefficient").gameObject.GetComponent<Coefficient>().GetValue();
+                if (this.transform.Find("TermsInBracket").GetChild(0).Find("Coefficient").gameObject.GetComponent<BracketInsideCoefficient>().droppedOn)
+                {
+                    // first item in bracket was dropped on
+                    arrow1.gameObject.SetActive(true);
+                    arrow1.sprite = solidArrow;
+                    arrow1Text.SetActive(true);
+                    arrow1Text.transform.Find("Text").gameObject.GetComponent<Text>().text = coef.ToString() + "x";
+
+                    arrow2.gameObject.SetActive(true);
+                    arrow2.gameObject.GetComponent<Image>().sprite = dashedArrow;
+                } else
+                {
+                    arrow2.gameObject.SetActive(true);
+                    arrow2.sprite = solidArrow;
+                    arrow2Text.SetActive(true);
+                    arrow2Text.transform.Find("Text").gameObject.GetComponent<Text>().text = coef.ToString() + "x";
+
+                    arrow1.gameObject.SetActive(true);
+                    arrow1.gameObject.GetComponent<Image>().sprite = dashedArrow;
+                }
             }
         }
     }

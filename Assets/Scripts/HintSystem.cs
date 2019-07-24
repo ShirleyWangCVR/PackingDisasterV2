@@ -29,12 +29,14 @@ public class HintSystem : MonoBehaviour
     private Coroutine currentHint;
     private List<string> dragLog;
     private int numBrackets;
+    private int level;
 
     // Start is called before the first frame update
     void Start()
     {
         dragLog = new List<string>();
         numBrackets = gameController.GetInitialBrackets();
+        level = gameController.GetLevel();
         random = new System.Random();
     }
 
@@ -160,7 +162,7 @@ public class HintSystem : MonoBehaviour
         {
             StartCoroutine(ShowHint(boxPositive));
         }
-        else if (seesaw.NumericalVariables() != 1)
+        else if (seesaw.CoefficientVariables() != 1)
         {
             StartCoroutine(ShowHint(boxOne));
         }
@@ -198,7 +200,7 @@ public class HintSystem : MonoBehaviour
             // brackets not expanding enough
             return "expanding brackets";
         }
-        else if (random.Next(1, 4) == 1) // TODO: dunno what to check for coefficient review so its just random
+        else if (random.Next(1, 4) == 1 && level > 1) // TODO: dunno what to check for coefficient review so its just random
         {
             return "coefficients";
         }

@@ -69,6 +69,11 @@ public class GameController : MonoBehaviour
         return equation;
     }
 
+    public int GetLevel()
+    {
+        return level;
+    }
+
     // set up the seesaw according to the equation data
     protected virtual void SetUpSeesaw()
     {
@@ -181,7 +186,7 @@ public class GameController : MonoBehaviour
             inputTimer = 0;
         }
 
-        if(inputTimer >= 5f) // time of inactivity
+        if(inputTimer >= 10f) // time of inactivity
         {
             inputTimer = 0;
             // Debug.Log("Inactive for 5 secs");

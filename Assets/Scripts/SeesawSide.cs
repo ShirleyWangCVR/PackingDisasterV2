@@ -195,6 +195,27 @@ public class SeesawSide : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
         return num;
     }
 
+    public double CoefficientVariables()
+    {
+        double num = 0;
+        foreach(Transform child in terms.transform)
+        {
+            if (child.gameObject.GetComponent<Draggable>().typeOfItem == Draggable.Slot.Variable)
+            {
+                Transform coefficient = child.Find("Coefficient");
+                double coef;
+                if (coefficient != null)
+                {
+                    coef = coefficient.gameObject.GetComponent<Coefficient>().GetValue();
+                } else {
+                    coef = 1;
+                }
+                num = num + coef;
+            }
+        }
+        return num;
+    }
+
     // get the total value of all values on this side
     public double NumericalValues()
     {
