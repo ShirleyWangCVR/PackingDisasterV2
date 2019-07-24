@@ -120,9 +120,12 @@ public class FinishedPanelManager : MonoBehaviour
 
     public void SetProblemArea(string problemArea)
     {
-        reviewBubble.SetActive(true);
-        reviewDialogue.text = "Do you want to review " + problemArea + "?";
-        reviewButton.SetActive(true);
+        if (problemArea != "")
+        {
+            reviewBubble.SetActive(true);
+            reviewDialogue.text = "Do you want to review " + problemArea + "?";
+            reviewButton.SetActive(true);
+        }
         dataController.SetProblemArea(problemArea);
     }
 

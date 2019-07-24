@@ -71,6 +71,8 @@ public class ReviewScreenController : MonoBehaviour
 
             for (int i = 0; i < topics.Length; i++)
             {
+                topics[i].SetUnlocked(true);
+                /*
                 if (i < bound)
                 {
                     topics[i].SetUnlocked(true);
@@ -81,6 +83,7 @@ public class ReviewScreenController : MonoBehaviour
                     topics[i].gameObject.transform.Find("Image").gameObject.GetComponent<Image>().sprite = locked;
                     topics[i].gameObject.transform.Find("Text").gameObject.GetComponent<Text>().text = "";
                 }
+                */
             }
         }
     }

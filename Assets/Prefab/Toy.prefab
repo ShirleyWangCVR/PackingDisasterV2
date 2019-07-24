@@ -27,7 +27,7 @@ RectTransform:
   m_GameObject: {fileID: 4198888554307400931}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: -1, z: 1}
   m_Children: []
   m_Father: {fileID: 8588036022212706695}
   m_RootOrder: 1
@@ -58,7 +58,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -104,7 +104,7 @@ RectTransform:
   m_GameObject: {fileID: 7017859109228230586}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.1975, y: 1.1975, z: 1.1975}
+  m_LocalScale: {x: 0.93375, y: 0.93375, z: 0.93375}
   m_Children:
   - {fileID: 5259839245786262356}
   - {fileID: 5488746371978077044}
@@ -204,7 +204,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5259839245786262356
 RectTransform:
   m_ObjectHideFlags: 0
