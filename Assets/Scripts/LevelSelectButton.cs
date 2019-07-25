@@ -8,6 +8,7 @@ public class LevelSelectButton : MonoBehaviour
 {
     public LevelSelectController levelSelectController;
     public int level;
+    public bool tutorial;
     
     // Start is called before the first frame update
     void Start()
@@ -20,6 +21,6 @@ public class LevelSelectButton : MonoBehaviour
         // string num = this.transform.Find("Number").gameObject.GetComponent<Text>().text;
 
         // int level = Int32.Parse(num);
-        levelSelectController.StartLevel(level);
+        levelSelectController.StartLevel(level, tutorial);
     }
 }

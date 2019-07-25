@@ -16,28 +16,28 @@ public class T2GameController : GameController
     void Start()
     {
         dataController = FindObjectOfType<DataController>();
-        gameLevel = dataController.GetDifficulty();
-        equation = dataController.GetCurrentEquationData(gameLevel);
-        isTutorial = gameLevel <= 2 || gameLevel == 6 || gameLevel == 11 || gameLevel == 16;
+        level = dataController.GetDifficulty();
+        isTutorial = dataController.GetCurrentTut();
+        equation = dataController.GetCurrentEquationData(level, isTutorial);
         inputTimer = 0;
         won = false;
 
-        if (gameLevel < 11)
+
+        if (level < 4)
         {
             BothSideOperations bso = FindObjectOfType<BothSideOperations>();
             bso.gameObject.SetActive(false);
         }
 
-        if (gameLevel <= 5)
+        if (isTutorial)
         {
-            level = 1;
+            levelText.text = "Tutorial " + level.ToString();
         }
         else
         {
-            level = gameLevel / 5 + gameLevel % 5;
+            levelText.text = "Stage " + level.ToString();
         }
 
-        levelText.text = "Stage " + level.ToString();
         currentlyDragging = false;
         roundActive = true;
 

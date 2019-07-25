@@ -135,29 +135,43 @@ public class SeesawSide : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
     // get the number of variables currently on this side
     public int NumVariables()
     {
-        int num = 0;
-        foreach(Transform child in terms.transform)
+        if (terms == null)
         {
-            if (child.gameObject.GetComponent<Draggable>().typeOfItem == Draggable.Slot.Variable)
-            {
-                num++;
-            }
+            return 0;
         }
-        return num;
+        else
+        {
+            int num = 0;
+            foreach(Transform child in terms.transform)
+            {
+                if (child.gameObject.GetComponent<Draggable>().typeOfItem == Draggable.Slot.Variable)
+                {
+                    num++;
+                }
+            }
+            return num;
+        }
     }
 
     // get the number of values currently on this side
     public int NumValues()
     {
-        int num = 0;
-        foreach(Transform child in terms.transform)
+        if (terms == null)
         {
-            if (child.gameObject.GetComponent<Draggable>().typeOfItem == Draggable.Slot.Value)
-            {
-                num++;
-            }
+            return 0;
         }
-        return num;
+        else
+        {
+            int num = 0;
+            foreach(Transform child in terms.transform)
+            {
+                if (child.gameObject.GetComponent<Draggable>().typeOfItem == Draggable.Slot.Value)
+                {
+                    num++;
+                }
+            }
+            return num;
+        }
     }
 
     public int NumBrackets()

@@ -7,9 +7,6 @@ using UnityEngine.UI;
  */
 public class T2SeesawController : SeesawController
 {
-    public Text leftEquationText;
-    public Text rightEquationText;
-    public Text signText;
     // other variables inherited from SeesawController
 
     // Start is called before the first frame update
@@ -334,18 +331,6 @@ public class T2SeesawController : SeesawController
 
         leftEquationText.text = lside;
         rightEquationText.text = rside;
-
-
-
-        /* else if (tilt > 0)
-        {
-            signText.text = ">";
-        }
-        else if (tilt < 0)
-        {
-            signText.text = "<";
-        } */
-
     }
 
     public string StringTerm(Transform term)

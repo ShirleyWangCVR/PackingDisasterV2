@@ -12,27 +12,29 @@ public class MenuController : MonoBehaviour
 
     private DataController dataController;
     private int currentMax;
+    private bool atTut;
 
     public void Start()
     {
         dataController = FindObjectOfType<DataController>();
-        currentMax = dataController.GetDifficulty();
-        if (currentMax > 0)
+        currentMax = dataController.GetQuestionType();
+        atTut = dataController.GetAtTut();
+        /* if (currentMax > 0)
         {
             resumeButton.SetActive(true);
             levelselButton.SetActive(true);
-        }
+        } */
     }
 
     // when start button is pressed
     public void FromBeginning()
     {
-        dataController.StartLevel(1);
+        dataController.StartLevel(1, true);
     }
 
     public void ResumeGame()
     {
-        dataController.StartLevel(currentMax);
+        dataController.StartLevel(currentMax, atTut);
     }
 
     public void LevelSelect()

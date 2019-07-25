@@ -17,13 +17,16 @@ public class DataController : MonoBehaviour
     public GameObject bracketPrefab;
 
     // list of all equations from the loaded json.
-    private int type;
     private GameData allEquationData;
     private int[] levelIndexes;
     private int[] starsObtained;
     private int[] triedTutorial;
     private int[] tutorialStars;
     private int currentLevel; // current level
+    private bool currentlyAtTutorial; // are we currently at a tutorial
+    private int type; // highest type achieved
+    private bool highestTutorial; // at the highest type achieved are we currently at a tutorial
+    
     // private int levelsCompleted; // use this to set how many levels available on level select
     private string equationDataFileName = "equations.json";
     private PlayerOverallData playerLog;
@@ -34,36 +37,25 @@ public class DataController : MonoBehaviour
     private string currentProblemArea;
     private string[] prevScenes;
 
-    // Player Progress used to store between sessions. Currently not in use.
-    // private PlayerProgress playerProgress;
-    // private string dialogueDataFileName = "dialogueData.json";
-
     // Start is called before the first frame update
     void Start()
     {
         DontDestroyOnLoad(gameObject);
         LoadGameData();
-        // LoadDialogueData();
-        // LoadPlayerProgress();
         SceneManager.LoadScene("Menu");
         currentLevel = 1;
         type = 1;
+        currentlyAtTutorial = true;
+        highestTutorial = true;
         currentProblemArea = "";
         prevScenes = new string[2];
 
         playerDataFileName = "playerData" + Directory.GetFiles(Application.streamingAssetsPath, "*.json").Length.ToString() + ".json";
 
-        levelIndexes = new int[5];
-        starsObtained = new int[5];
-        triedTutorial = new int[5];
-        tutorialStars = new int[5];
-        for (int i = 0; i < 5; i++)
-        {
-            starsObtained[i] = 0;
-            levelIndexes[i] = 0;
-            triedTutorial[i] = 0;
-            tutorialStars[i] = 0;
-        }
+        levelIndexes = new int[7];
+        starsObtained = new int[7];
+        triedTutorial = new int[6];
+        tutorialStars = new int[6];
 
         allEquationData.InitializeEquationsByString();
 
@@ -93,9 +85,74 @@ public class DataController : MonoBehaviour
     }
 
     // get current equation to show depending on provided level
-    public EquationData GetCurrentEquationData(int level)
+    public EquationData GetCurrentEquationData(int level, bool tutorial)
     {
-        if (level == 1)
+        if (tutorial)
+        {
+            if (level == 1)
+            {
+                return allEquationData.tut1Equation;
+            }
+            else if (level == 2)
+            {
+                return allEquationData.tut2Equation;
+            }
+            else if (level == 3)
+            {
+                return allEquationData.tut3Equation;
+            }
+            else if (level == 4)
+            {
+                return allEquationData.tut4Equation;
+            }
+            else if (level == 5)
+            {
+                return allEquationData.tut5Equation;
+            }
+            else if (level == 6)
+            {
+                return allEquationData.tut6Equation;
+            }
+        }
+        else
+        {
+            if (level == 1)
+            {
+                return allEquationData.type1Equations[levelIndexes[0]];
+            }
+            else if (level == 2)
+            {
+                return allEquationData.type2Equations[levelIndexes[1]];
+            }
+            else if (level == 3)
+            {
+                return allEquationData.type3Equations[levelIndexes[2]];
+            }
+            else if (level == 4)
+            {
+                return allEquationData.type4Equations[levelIndexes[3]];
+            }
+            else if (level == 5)
+            {
+                return allEquationData.type5Equations[levelIndexes[4]];
+            }
+            else if (level == 6)
+            {
+                return allEquationData.type6Equations[levelIndexes[5]];
+            }
+            else if (level == 7)
+            {
+                return allEquationData.type7Equations[levelIndexes[6]];
+            }
+        }
+
+        return allEquationData.tut1Equation;
+        
+        
+        
+        
+        
+        /* if (level == 1)
         {
             return allEquationData.tut1Equation;
         }
@@ -136,12 +193,14 @@ public class DataController : MonoBehaviour
             return allEquationData.type5Equations[levelIndexes[4]];
         }
 
-        return allEquationData.tut1Equation;
+        return allEquationData.tut1Equation; */
     }
 
     public int GetTriedTutorial(int level)
     {
-        if (level <= 2)
+        return triedTutorial[level - 1];
+        
+        /* if (level <= 2)
         {
             return triedTutorial[level - 1];
         }
@@ -157,12 +216,12 @@ public class DataController : MonoBehaviour
         {
             return triedTutorial[4];
         }
-        return 0;
+        return 0; */
     }
 
     public void SetTriedTutorial(int level, int num)
     {
-        if (level <= 2)
+        /* if (level <= 2)
         {
             triedTutorial[level - 1] = num;
         }
@@ -177,14 +236,40 @@ public class DataController : MonoBehaviour
         else if (level == 16)
         {
             triedTutorial[4] = num;
-        }
+        } */
+        triedTutorial[level - 1] = num;
     }
 
-    public void StartLevel(int level)
+    public void StartLevel(int level, bool tutorial)
     {
-        SetDifficulty(level);
+        // SetDifficulty(level, tutorial);
+        currentLevel = level;
+        currentlyAtTutorial = tutorial;
 
-        if (level <= 2)
+        if (tutorial)
+        {
+            if (level <= 3)
+            {
+                SceneManager.LoadScene("TutLevel1");
+            }
+            else
+            {
+                SceneManager.LoadScene("TutLevel2");
+            }
+        }
+        else
+        {
+            if (level <= 3)
+            {
+                SceneManager.LoadScene("Main");
+            }
+            else
+            {
+                SceneManager.LoadScene("MainT2");
+            }
+        }
+
+        /* if (level <= 2)
         {
             SceneManager.LoadScene("TutLevel1");
         }
@@ -203,17 +288,33 @@ public class DataController : MonoBehaviour
         else
         {
             SceneManager.LoadScene("Ending");
-        }
+        } */
     }
 
     // only called when completed a question
     public void SubmitNewStars(int level, int stars, bool isTut)
     {
-        level = currentLevel;
+        // level = currentLevel;
 
         if (isTut)
         {
-            if (level <= 2)
+            if (stars > 0)
+            {
+                if (level == type)
+                {
+                    highestTutorial = false;
+                }
+            }
+            
+            int starsBefore = tutorialStars[level - 1];
+            if (starsBefore <= stars)
+            {
+                tutorialStars[level - 1] = stars;
+                stars = stars - starsBefore;
+            }
+            
+            
+            /* if (level <= 2)
             {
                 int starsBefore = tutorialStars[level - 1];
                 if (starsBefore <= stars)
@@ -249,7 +350,7 @@ public class DataController : MonoBehaviour
                     tutorialStars[4] = stars;
                     stars = stars - starsBefore;
                 }
-            }
+            } */
         }
         else
         {
@@ -262,7 +363,7 @@ public class DataController : MonoBehaviour
             }
         }
 
-        if (level <= 5)
+        /* if (level <= 5)
         {
             level = 1;
         }
@@ -281,7 +382,7 @@ public class DataController : MonoBehaviour
         else if (level <= 25)
         {
             level = 5;
-        }
+        } */
 
         starsObtained[level - 1] = starsObtained[level - 1] + stars;
 
@@ -291,10 +392,13 @@ public class DataController : MonoBehaviour
             if (level == type)
             {
                 type++;
+                highestTutorial = true;
+                // TODO: find a way to figure out when this is turned false
             }
         }
     }
 
+    // go to the next equation's index after completing a level
     public void GoToNextIndex(bool isTut, int level)
     {
         if (! isTut)
@@ -323,15 +427,26 @@ public class DataController : MonoBehaviour
         return currentLevel;
     }
 
-    public void SetDifficulty(int difficulty)
+    public bool GetCurrentTut()
     {
-        currentLevel = difficulty;
+        return currentlyAtTutorial;
     }
 
-    public int GetTypeQuestion()
+    public int GetQuestionType()
     {
         return type;
     }
+
+    public bool GetAtTut()
+    {
+        return highestTutorial;
+    }
+
+    /* public void SetDifficulty(int difficulty, bool tutorial)
+    {
+        currentLevel = difficulty;
+        currentlyAtTutorial = tutorial;
+    } */
 
     public void SetTypeQuestion(int newType)
     {

@@ -24,7 +24,7 @@ public class DragCounter : MonoBehaviour
         numDrags = 0;
         dragText.text = numDrags.ToString();
 
-        int level = FindObjectOfType<DataController>().GetTypeQuestion();
+        int level = FindObjectOfType<DataController>().GetQuestionType();
         if (level <= 3)
         {
             boundaryOne = 4;
@@ -40,7 +40,7 @@ public class DragCounter : MonoBehaviour
 
         boundaryTwo = 2 * boundaryOne;
 
-        constantBy = 200 / (boundaryOne * 3); // TODO: finetune this so that it fits screen stretch
+        constantBy = (float) 200 / (boundaryOne * 3); // TODO: finetune this so that it fits screen stretch
 
     }
 

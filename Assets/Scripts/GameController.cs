@@ -25,7 +25,6 @@ public class GameController : MonoBehaviour
     protected bool isTutorial;
     protected bool roundActive;
     protected int level;
-    protected int gameLevel;
     protected float inputTimer;
     protected bool won;
     protected int numInitialBrackets;
@@ -35,22 +34,30 @@ public class GameController : MonoBehaviour
     {
         // get data from dataController
         dataController = FindObjectOfType<DataController>();
-        gameLevel = dataController.GetDifficulty();
-        equation = dataController.GetCurrentEquationData(gameLevel);
-        isTutorial = gameLevel <= 2 || gameLevel == 6 || gameLevel == 11 || gameLevel == 16;
+        level = dataController.GetDifficulty();
+        isTutorial = dataController.GetCurrentTut();
+        equation = dataController.GetCurrentEquationData(level, isTutorial);
         inputTimer = 0;
         won = false;
 
-        if (gameLevel <= 5)
+        /* if (gameLevel <= 5)
         {
             level = 1;
         }
         else
         {
             level = gameLevel / 5 + gameLevel % 5;
+        } */
+
+        if (isTutorial)
+        {
+            levelText.text = "Tutorial " + level.ToString();
+        }
+        else
+        {
+            levelText.text = "Stage " + level.ToString();
         }
 
-        levelText.text = "Stage " + level.ToString();
         currentlyDragging = false;
         roundActive = true;
 
@@ -281,7 +288,7 @@ public class GameController : MonoBehaviour
     public void TryAgain()
     {
         // restart scene with the same equation
-        dataController.StartLevel(gameLevel);
+        dataController.StartLevel(level, isTutorial);
     }
 
     public void BackToLevelSelect()
@@ -291,5 +298,10 @@ public class GameController : MonoBehaviour
             dataController.GoToNextIndex(isTutorial, level);
         }
         SceneManager.LoadScene("Level Select");
+    }
+
+    public void NextQuestion()
+    {
+        // create a next question shortcut
     }
 }
