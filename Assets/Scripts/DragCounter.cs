@@ -57,7 +57,7 @@ public class DragCounter : MonoBehaviour
 
         if (numDrags <= boundaryOne * 3)
         {
-            cover.GetComponent<RectTransform>().sizeDelta = new Vector2(numDrags * constantBy, 38);
+            cover.GetComponent<RectTransform>().sizeDelta = new Vector2(numDrags * constantBy, 28);
         }
 
         if (numDrags == boundaryOne + 1)

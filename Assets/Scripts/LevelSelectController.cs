@@ -30,7 +30,7 @@ public class LevelSelectController : MonoBehaviour
             endingButton.SetActive(true);
         }
 
-        /* for (int i = 0; i < 7; i++)
+        for (int i = 0; i < 7; i++)
         {
             int starsCount = dataController.GetStars(i + 1);
             starMeters[i].transform.Find("Cover").gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(292 * (15 - starsCount) / 15, 32);
@@ -51,6 +51,11 @@ public class LevelSelectController : MonoBehaviour
                 topicLabels[i].transform.Find("Text").gameObject.SetActive(true);
                 topicLabels[i].transform.Find("Lock").gameObject.SetActive(false);
                 topicLabels[i].GetComponent<Image>().sprite = redback;
+
+                if (starsCount == 15)
+                {
+                    levelButtons[i].transform.Find("FullMarks").gameObject.SetActive(true);
+                }
 
                 if (i == levelsShow - 1)
                 {
@@ -73,7 +78,7 @@ public class LevelSelectController : MonoBehaviour
                     tutorialButtons[i].transform.Find("Stars").gameObject.SetActive(false);
                 }
             }
-        } */
+        }
     }
 
     public void StartLevel(int level, bool tutorial)
@@ -89,5 +94,10 @@ public class LevelSelectController : MonoBehaviour
     public void ToEnding()
     {
         SceneManager.LoadScene("Ending");
+    }
+
+    public void ToReview()
+    {
+        SceneManager.LoadScene("Review");
     }
 }

@@ -252,9 +252,13 @@ public class DataController : MonoBehaviour
             {
                 SceneManager.LoadScene("TutLevel1");
             }
-            else
+            else if (level <= 7)
             {
                 SceneManager.LoadScene("TutLevel2");
+            }
+            else
+            {
+                SceneManager.LoadScene("Ending");
             }
         }
         else

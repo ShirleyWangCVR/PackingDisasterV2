@@ -20,20 +20,34 @@ public class FinishedPanelManager : MonoBehaviour
     public GameObject reviewBubble;
     public Text reviewDialogue;
     public GameObject reviewButton;
+    public GameObject nextQuestion;
+    public GameObject starMeter;
+    public Text stageText;
 
     private AudioSource audioSource;
     private DataController dataController;
+    private int level;
 
     void Start()
     {
         dataController = FindObjectOfType<DataController>();
         audioSource = this.gameObject.GetComponent<AudioSource>();
+        level = dataController.GetDifficulty();
     }
 
     // set finished display to if player wins
     public void DisplayCorrectlyBalanced(int correctValue, int timeStars, int dragStars)
     {
         audioSource.PlayOneShot(youWinSfx, 0.7f);
+        nextQuestion.SetActive(true);
+        stageText.text = "Stage " + level.ToString();
+        SetStarMeter();
+
+        int starsCount = dataController.GetStars(level);
+        if (starsCount == 15)
+        {
+            nextQuestion.transform.Find("Text").gameObject.GetComponent<Text>().text = "Next Topic";
+        }
 
         starsDisplay[0].sprite = fullStar;
         for (int i = 0; i < timeStars; i++)
@@ -95,8 +109,9 @@ public class FinishedPanelManager : MonoBehaviour
     public void DisplayWrongBalanced()
     {
         audioSource.PlayOneShot(youLoseSfx, 0.7f);
-
         finishedDisplay.SetActive(true);
+        SetStarMeter();
+        stageText.text = "Stage " + level.ToString();
         userMessage.text = "Try Again! Make Sure the Seesaw is Balanced.";
     }
 
@@ -104,8 +119,9 @@ public class FinishedPanelManager : MonoBehaviour
     public void DisplayNotYetBalanced()
     {
         audioSource.PlayOneShot(youLoseSfx, 0.7f);
-
         finishedDisplay.SetActive(true);
+        SetStarMeter();
+        stageText.text = "Stage " + level.ToString();
         userMessage.text = "Try Again! Remember To Simplify As Much As You Can.";
     }
 
@@ -113,8 +129,9 @@ public class FinishedPanelManager : MonoBehaviour
     public void DisplaySeesawTipped()
     {
         audioSource.PlayOneShot(youLoseSfx, 0.7f);
-
         finishedDisplay.SetActive(true);
+        SetStarMeter();
+        stageText.text = "Stage " + level.ToString();
         userMessage.text = "The Seesaw Tipped Over! Try Again!";
     }
 
@@ -134,4 +151,10 @@ public class FinishedPanelManager : MonoBehaviour
         SceneManager.LoadScene("Review");
     }
 
+    void SetStarMeter()
+    {
+        int starsCount = dataController.GetStars(level);
+        starMeter.transform.Find("Cover").gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(192 * (15 - starsCount) / 15, 32);
+        starMeter.transform.Find("Text").gameObject.GetComponent<Text>().text = starsCount.ToString() + "/15";
+    }
 }

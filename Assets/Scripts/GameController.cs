@@ -303,5 +303,15 @@ public class GameController : MonoBehaviour
     public void NextQuestion()
     {
         // create a next question shortcut
+        int starCount = dataController.GetStars(level);
+        if (starCount == 15)
+        {
+            dataController.StartLevel(level + 1, true);
+        }
+        else
+        {
+            dataController.GoToNextIndex(isTutorial, level);
+            dataController.StartLevel(level, false);
+        }
     }
 }
