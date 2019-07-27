@@ -442,12 +442,6 @@ public class DataController : MonoBehaviour
         return highestTutorial;
     }
 
-    /* public void SetDifficulty(int difficulty, bool tutorial)
-    {
-        currentLevel = difficulty;
-        currentlyAtTutorial = tutorial;
-    } */
-
     public void SetTypeQuestion(int newType)
     {
         type = newType;

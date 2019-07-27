@@ -190,7 +190,7 @@ public class HintSystem : MonoBehaviour
             }
         }
 
-        if (wrongDrags > 1)
+        if (wrongDrags > 1 && level > 1)
         {
             // a few dragging errors
             return "moving from one side to the other";
@@ -200,7 +200,7 @@ public class HintSystem : MonoBehaviour
             // brackets not expanding enough
             return "expanding brackets";
         }
-        else if (random.Next(1, 4) == 1 && level > 1) // TODO: dunno what to check for coefficient review so its just random
+        else if (random.Next(1, 4) == 1 && level > 3) // TODO: dunno what to check for coefficient review so its just random
         {
             return "coefficients";
         }

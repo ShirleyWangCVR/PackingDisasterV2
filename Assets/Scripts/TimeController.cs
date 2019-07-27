@@ -36,7 +36,9 @@ public class TimeController : MonoBehaviour
         currentTime = 0;
         currentStars = 2;
 
-        tutorial = dataController.GetDifficulty() <= 2 || dataController.GetDifficulty() == 6 || dataController.GetDifficulty() == 11 || dataController.GetDifficulty() == 16;
+        // tutorial = dataController.GetDifficulty() <= 2 || dataController.GetDifficulty() == 6 || dataController.GetDifficulty() == 11 || dataController.GetDifficulty() == 16;
+        tutorial = dataController.GetCurrentTut();
+    
     }
 
     // Update is called once per frame

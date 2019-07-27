@@ -56,17 +56,21 @@ public class ReviewScreenController : MonoBehaviour
             }
 
             // get current level and set sprite = locked, Text.SetActive(false), set locked
-            int level = dataController.GetDifficulty();
+            int level = dataController.GetQuestionType();
             int bound;
-            if (level < 6)
+            if (level < 2)
+            {
+                bound = 4;
+            }
+            else if (level < 4)
             {
                 bound = 5;
             }
-            else if (level < 11)
+            else if (level < 5)
             {
                 bound = 8;
             }
-            else if (level < 16)
+            else if (level < 6)
             {
                 bound = 9;
             }
@@ -88,8 +92,7 @@ public class ReviewScreenController : MonoBehaviour
                     topics[i].SetUnlocked(false);
                     topics[i].gameObject.transform.Find("Image").gameObject.GetComponent<Image>().sprite = locked;
                     topics[i].gameObject.transform.Find("Text").gameObject.GetComponent<Text>().text = "";
-                } 
-                
+                }        
             }
         }
     }
@@ -129,7 +132,5 @@ public class ReviewScreenController : MonoBehaviour
                 SceneManager.LoadScene("Level Select");
             }
         }
-        
-        
     }
 }

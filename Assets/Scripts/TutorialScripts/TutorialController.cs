@@ -23,6 +23,7 @@ public class TutorialController : MonoBehaviour
     private bool startingUp;
     private bool doneTutorial;
     private bool checkArrow;
+    private bool flash;
 
     // Start is called before the first frame update
     void Start()
@@ -46,6 +47,7 @@ public class TutorialController : MonoBehaviour
         finishedSecondDrag = false;
         doneTutorial = false;
         checkArrow = false;
+        flash = false;
 
         if (tutorialLevel == 1)
         {
@@ -75,7 +77,7 @@ public class TutorialController : MonoBehaviour
         else if (tutorialLevel == 6)
         {
             startingUp = true;
-            interactivePanel.transform.Find("Seesaw Arrow 11").gameObject.SetActive(true);
+            FlashArrow("Seesaw Arrow 11");
         }
     }
 
@@ -88,11 +90,11 @@ public class TutorialController : MonoBehaviour
             {
                 if (seesaw.GetComponent<SeesawController>().GetTilt() > 0.5)
                 {
-                    interactivePanel.transform.Find("Seesaw Arrow 3").gameObject.SetActive(false);
+                    TurnOffArrow("Seesaw Arrow 3");
                 }
                 else if (seesaw.GetComponent<SeesawController>().GetTilt() < -0.5)
                 {
-                    interactivePanel.transform.Find("Seesaw Arrow 2").gameObject.SetActive(false);
+                    TurnOffArrow("Seesaw Arrow 2");
                 }
                 
                 if (seesaw.GetComponent<SeesawController>().CheckDraggedStillBalanced())
@@ -106,12 +108,12 @@ public class TutorialController : MonoBehaviour
             {
                 if (seesaw.GetComponent<SeesawController>().GetTilt() > 0.5)
                 {
-                    interactivePanel.transform.Find("Seesaw Arrow 3").gameObject.SetActive(false);
+                    TurnOffArrow("Seesaw Arrow 3");
                     checkArrow = true;
                 }
                 else if (seesaw.GetComponent<SeesawController>().GetTilt() < -0.5)
                 {
-                    interactivePanel.transform.Find("Seesaw Arrow 10").gameObject.SetActive(false);
+                    TurnOffArrow("Seesaw Arrow 10");
                     checkArrow = true;
                 }
                 
@@ -120,8 +122,8 @@ public class TutorialController : MonoBehaviour
                     if (seesaw.GetComponent<SeesawController>().CheckDraggedStillBalanced2())
                     {
                         waitForSecondDrag = false;
-                        interactivePanel.transform.Find("Seesaw Arrow 3").gameObject.SetActive(false);
-                        interactivePanel.transform.Find("Seesaw Arrow 10").gameObject.SetActive(false);
+                        TurnOffArrow("Seesaw Arrow 3");
+                        TurnOffArrow("Seesaw Arrow 10");
                         DraggedCorrectly2();
                     }
                 }
@@ -131,7 +133,12 @@ public class TutorialController : MonoBehaviour
         {
             if (waitForFirstDrag)
             {
-                seesaw.transform.Find("RHSPositive").GetChild(0).gameObject.SetActive(true);
+                // seesaw.transform.Find("RHSPositive").GetChild(0).gameObject.SetActive(true);
+                if (flash)
+                {
+                    StartCoroutine(FlashSide(seesaw.transform.Find("RHSPositive")));
+                    flash = false;
+                }
 
                 if (seesaw.GetComponent<SeesawController>().CheckDraggedToPositive())
                 {
@@ -142,18 +149,27 @@ public class TutorialController : MonoBehaviour
             }
             if (waitForSecondDrag)
             {
-                seesaw.transform.Find("LHSNegative").GetChild(0).gameObject.SetActive(true);
+                // seesaw.transform.Find("LHSNegative").GetChild(0).gameObject.SetActive(true);
+                if (flash)
+                {
+                    StartCoroutine(FlashSide(seesaw.transform.Find("LHSNegative")));
+                    flash = false;
+                }
+                // StartCoroutine(FlashSide(seesaw.transform.Find("LHSNegative")));
                 
                 if (seesaw.GetComponent<SeesawController>().CheckDraggedToNegative())
                 {
                     waitForSecondDrag = false;
                     DraggedToyOver2();
                     seesaw.transform.Find("LHSNegative").GetChild(0).gameObject.SetActive(false);
+                    waitForThirdDrag = true;
                 }
             }
-            if (seesaw.transform.Find("LHSPositive").gameObject.GetComponent<SeesawSide>().NumValues() == 2)
+            if (seesaw.transform.Find("LHSPositive").gameObject.GetComponent<SeesawSide>().NumValues() == 2 && waitForThirdDrag)
             {
-                interactivePanel.transform.Find("Seesaw Arrow 8").gameObject.SetActive(false);
+                TurnOffArrow("Seesaw Arrow 8");
+                FlashArrow("Seesaw Arrow 11");
+                waitForThirdDrag = false;
             }
         }
         else if (tutorialLevel == 4)
@@ -177,11 +193,11 @@ public class TutorialController : MonoBehaviour
 
             if (seesaw.transform.Find("RHSPositive").gameObject.GetComponent<SeesawSide>().NumValues() == 1 && ! seesaw.GetComponent<SeesawController>().GetDragging())
             {
-                interactivePanel.transform.Find("Seesaw Arrow 9").gameObject.SetActive(false);
+                TurnOffArrow("Seesaw Arrow 9");
             }
             if (seesaw.transform.Find("RHSNegative").gameObject.GetComponent<SeesawSide>().NumValues() == 0 && ! seesaw.GetComponent<SeesawController>().GetDragging())
             {
-                interactivePanel.transform.Find("Seesaw Arrow 13").gameObject.SetActive(false);
+                TurnOffArrow("Seesaw Arrow 13");
             }
         }
         else if (tutorialLevel == 6)
@@ -208,13 +224,16 @@ public class TutorialController : MonoBehaviour
         interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
         if (tutorialLevel == 1)
         {
-            interactivePanel.transform.Find("Seesaw Arrow 2").gameObject.SetActive(true);
-            interactivePanel.transform.Find("Seesaw Arrow 3").gameObject.SetActive(true);
+            AnimateArrow("Seesaw Arrow 2");
+            AnimateArrow("Seesaw Arrow 3");
+            StartCoroutine(FlashLines("Flash 1"));
+            StartCoroutine(FlashLines("Flash 2"));
             waitForFirstDrag = true;
         }
         else if (tutorialLevel == 2)
         {
             waitForFirstDrag = true;
+            flash = true;
             interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
         }
         else if (tutorialLevel == 3)
@@ -225,22 +244,22 @@ public class TutorialController : MonoBehaviour
         else if (tutorialLevel == 4)
         {
             interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
-            interactivePanel.transform.Find("Seesaw Arrow 7").gameObject.SetActive(true);
-            interactivePanel.transform.Find("Seesaw Arrow 8").gameObject.SetActive(true);
+            FlashArrow("Seesaw Arrow 7");
+            FlashArrow("Seesaw Arrow 8");
             waitForFirstDrag = true;
             dialogueNum = 2;
         }
         else if (tutorialLevel == 5)
         {
             interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
-            interactivePanel.transform.Find("Seesaw Arrow").gameObject.SetActive(true);
+            FlashArrow("Seesaw Arrow");
             waitForFirstDrag = true;
         }
         else if (tutorialLevel == 6)
         {
             interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
-            interactivePanel.transform.Find("Seesaw Arrow 4").gameObject.SetActive(true);
-            interactivePanel.transform.Find("Seesaw Arrow 5").gameObject.SetActive(true);
+            FlashArrow("Seesaw Arrow 4");
+            FlashArrow("Seesaw Arrow 5");
             waitForFirstDrag = true;
         }
     }
@@ -249,32 +268,35 @@ public class TutorialController : MonoBehaviour
     {
         if (tutorialLevel == 1)
         {
-            interactivePanel.transform.Find("Seesaw Arrow 10").gameObject.SetActive(true);
-            interactivePanel.transform.Find("Seesaw Arrow 3").gameObject.SetActive(true);
+            AnimateArrow("Seesaw Arrow 3");
+            AnimateArrow("Seesaw Arrow 10");
+            StartCoroutine(FlashLines("Flash 3"));
+            StartCoroutine(FlashLines("Flash 4"));
             interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
             waitForSecondDrag = true;
         }
         else if (tutorialLevel == 2)
         {
-            interactivePanel.transform.Find("Seesaw Arrow 6").gameObject.SetActive(true);
+            AnimateArrow("Seesaw Arrow 6");
             waitForSecondDrag = true;
+            flash = true;
         }
         else if (tutorialLevel == 4)
         {
-            interactivePanel.transform.Find("Seesaw Arrow 12").gameObject.SetActive(true);
+            AnimateArrow("Seesaw Arrow 12");
             waitForSecondDrag = true;
         }
         else if (tutorialLevel == 5)
         {
             interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
-            interactivePanel.transform.Find("Seesaw Arrow 2").gameObject.SetActive(true);
+            FlashArrow("Seesaw Arrow 2");
             waitForSecondDrag = true;
         }
         else if (tutorialLevel == 6)
         {
             interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
-            interactivePanel.transform.Find("Seesaw Arrow 4").gameObject.SetActive(true);
-            interactivePanel.transform.Find("Seesaw Arrow 6").gameObject.SetActive(true);
+            FlashArrow("Seesaw Arrow 4");
+            FlashArrow("Seesaw Arrow 6");
             waitForSecondDrag = true;
         }
     }
@@ -283,14 +305,13 @@ public class TutorialController : MonoBehaviour
     {
         if (tutorialLevel == 1)
         {
-            interactivePanel.transform.Find("Seesaw Arrow 11").gameObject.SetActive(true);
+            FlashArrow("Seesaw Arrow 11");
             interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
             StartCoroutine(tutorialManager.EndDialogue());
             doneTutorial = true;
         }
         else if (tutorialLevel == 2)
         {
-            // interactivePanel.transform.Find("Seesaw Arrow 8").gameObject.SetActive(false);
             StartCoroutine(tutorialManager.EndDialogue());
             doneTutorial = true;
         }
@@ -303,7 +324,7 @@ public class TutorialController : MonoBehaviour
         else if (tutorialLevel == 5)
         {
             interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
-            interactivePanel.transform.Find("Seesaw Arrow 3").gameObject.SetActive(true);
+            FlashArrow("Seesaw Arrow 3");
             waitForThirdDrag = true;
         }
         else if (tutorialLevel == 6)
@@ -334,20 +355,21 @@ public class TutorialController : MonoBehaviour
             {
                 if (linesLeft == 3)
                 {
-                    interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
-                    interactivePanel.transform.Find("Seesaw Arrow").gameObject.SetActive(true);
+                    // interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
+                    // interactivePanel.transform.Find("Seesaw Arrow").gameObject.SetActive(true);
                 }
                 else if (linesLeft == 2)
                 {
-                    interactivePanel.transform.Find("Seesaw Arrow").gameObject.SetActive(false);
+                    // interactivePanel.transform.Find("Seesaw Arrow").gameObject.SetActive(false);
 
-                    interactivePanel.transform.Find("Seesaw Arrow 7").gameObject.SetActive(true);
-                    interactivePanel.transform.Find("Seesaw Arrow 9").gameObject.SetActive(true);
+                    FlashArrow("Seesaw Arrow 7");
+                    FlashArrow("Seesaw Arrow 9");
                 }
                 else if (linesLeft == 1)
                 {
-                    interactivePanel.transform.Find("Seesaw Arrow 7").gameObject.SetActive(false);
-                    interactivePanel.transform.Find("Seesaw Arrow 9").gameObject.SetActive(false);
+                    interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
+                    TurnOffArrow("Seesaw Arrow 7");
+                    TurnOffArrow("Seesaw Arrow 9");
                 }
             }
             else if (dialogueNum == 2)
@@ -355,7 +377,7 @@ public class TutorialController : MonoBehaviour
                 if (linesLeft == 1)
                 {
                     interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
-                    interactivePanel.transform.Find("Seesaw Arrow 2").gameObject.SetActive(false);
+                    TurnOffArrow("Seesaw Arrow 2");
                 }
             }
         }
@@ -366,28 +388,29 @@ public class TutorialController : MonoBehaviour
                 if (linesLeft == 4)
                 {
                     interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
-                    interactivePanel.transform.Find("Seesaw Arrow 4").gameObject.SetActive(true);
+                    FlashArrow("Seesaw Arrow 4");
                 }
                 else if (linesLeft == 3)
                 {
-                    interactivePanel.transform.Find("Seesaw Arrow 4").gameObject.SetActive(false);
-                    interactivePanel.transform.Find("Seesaw Arrow 5").gameObject.SetActive(true);
+                    TurnOffArrow("Seesaw Arrow 4");
+                    AnimateArrow("Seesaw Arrow 5");
                 }
-
             }
             if (dialogueNum == 2)
             {
                 if (linesLeft == 1)
                 {
-                    interactivePanel.transform.Find("Seesaw Arrow 5").gameObject.SetActive(false);
-                    interactivePanel.transform.Find("Seesaw Arrow 6").gameObject.SetActive(true);
+                    TurnOffArrow("Seesaw Arrow 5");
+                    AnimateArrow("Seesaw Arrow 6");
                 }
             }
             if (dialogueNum == 3)
             {
                 if (linesLeft == 2)
                 {
-                    interactivePanel.transform.Find("Seesaw Arrow 8").gameObject.SetActive(true);
+                    AnimateArrow("Seesaw Arrow 8");
+                    StartCoroutine(FlashLines("Flash 5"));
+                    StartCoroutine(FlashLines("Flash 6"));
                 }
             }
         }
@@ -395,21 +418,21 @@ public class TutorialController : MonoBehaviour
         {
             if (dialogueNum == 1)
             {
-                if (linesLeft == 2)
+                /* if (linesLeft == 2)
                 {
                     interactivePanel.transform.Find("Seesaw Arrow 10").gameObject.SetActive(true);
                 }
                 else if (linesLeft == 1)
                 {
                     interactivePanel.transform.Find("Seesaw Arrow 10").gameObject.SetActive(false);
-                }
+                } */
             }
             else if (dialogueNum == 2)
             {
                 if (linesLeft == 2)
                 {
-                    interactivePanel.transform.Find("Seesaw Arrow 9").gameObject.SetActive(true);
-                    interactivePanel.transform.Find("Seesaw Arrow 13").gameObject.SetActive(true);
+                    AnimateArrow("Seesaw Arrow 9");
+                    AnimateArrow("Seesaw Arrow 13");
                 }
             }
         }
@@ -419,12 +442,12 @@ public class TutorialController : MonoBehaviour
             {
                 if (linesLeft == 3)
                 {
-                    interactivePanel.transform.Find("Seesaw Arrow 11").gameObject.SetActive(false);
-                    interactivePanel.transform.Find("Seesaw Arrow 4").gameObject.SetActive(true);
+                    TurnOffArrow("Seesaw Arrow 11");
+                    FlashArrow("Seesaw Arrow 4");
                 }
                 if (linesLeft == 2)
                 {
-                    interactivePanel.transform.Find("Seesaw Arrow 4").gameObject.SetActive(false);
+                    TurnOffArrow("Seesaw Arrow 4");
                 }
             }
         }
@@ -433,19 +456,12 @@ public class TutorialController : MonoBehaviour
     // tutorial 1
     public void DraggedCorrectly()
     {
-        Debug.Log("Completed First Task");
-        // interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = true;
-        // interactivePanel.transform.Find("Seesaw Arrow 2").gameObject.SetActive(false);
-        // interactivePanel.transform.Find("Seesaw Arrow 3").gameObject.SetActive(false);
         dialogueNum = 2;
         dialogueTriggers[1].TriggerDialogue();
     }
 
     public void DraggedCorrectly2()
     {
-        // interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = true;
-        // interactivePanel.transform.Find("Seesaw Arrow 2").gameObject.SetActive(false);
-        // interactivePanel.transform.Find("Seesaw Arrow 3").gameObject.SetActive(false);
         dialogueNum = 3;
         dialogueTriggers[5].TriggerDialogue();
     }
@@ -453,18 +469,14 @@ public class TutorialController : MonoBehaviour
     // tutorial 2
     public void DraggedToyOver()
     {
-        Debug.Log("Completed First Task");
-        // interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = true;
-        interactivePanel.transform.Find("Seesaw Arrow 5").gameObject.SetActive(false);
+        TurnOffArrow("Seesaw Arrow 5");
         dialogueNum = 2;
         dialogueTriggers[3].TriggerDialogue();
     }
 
     public void DraggedToyOver2()
     {
-        Debug.Log("Completed Second Task");
-        // interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = true;
-        interactivePanel.transform.Find("Seesaw Arrow 6").gameObject.SetActive(false);
+        TurnOffArrow("Seesaw Arrow 6");
         dialogueNum = 3;
         dialogueTriggers[4].TriggerDialogue();
     }
@@ -473,21 +485,21 @@ public class TutorialController : MonoBehaviour
     public void DoubleClicked()
     {
         dialogueTriggers[1].TriggerDialogue();
-        interactivePanel.transform.Find("Seesaw Arrow 7").gameObject.SetActive(false);
-        interactivePanel.transform.Find("Seesaw Arrow 8").gameObject.SetActive(false);
+        TurnOffArrow("Seesaw Arrow 7");
+        TurnOffArrow("Seesaw Arrow 8");
     }
 
     public void Combined()
     {
         dialogueTriggers[2].TriggerDialogue();
-        interactivePanel.transform.Find("Seesaw Arrow 9").gameObject.SetActive(false);
+        TurnOffArrow("Seesaw Arrow 9");
         dialogueNum = 3;
     }
 
     public void DraggedOver()
     {
         dialogueTriggers[2].TriggerDialogue();
-        interactivePanel.transform.Find("Seesaw Arrow 12").gameObject.SetActive(false);
+        TurnOffArrow("Seesaw Arrow 12");
         dialogueNum = 3;
     }
 
@@ -496,9 +508,8 @@ public class TutorialController : MonoBehaviour
     {
         if (waitForFirstDrag)
         {
-            // interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = true;
             dialogueTriggers[4].TriggerDialogue();
-            interactivePanel.transform.Find("Seesaw Arrow").gameObject.SetActive(false);
+            TurnOffArrow("Seesaw Arrow");
             waitForFirstDrag = false;
         }
     }
@@ -507,7 +518,7 @@ public class TutorialController : MonoBehaviour
     {
         if (waitForSecondDrag)
         {
-            interactivePanel.transform.Find("Seesaw Arrow 2").gameObject.SetActive(false);
+            TurnOffArrow("Seesaw Arrow 2");
             dialogueTriggers[5].TriggerDialogue();
             waitForSecondDrag = false;
         }
@@ -517,8 +528,7 @@ public class TutorialController : MonoBehaviour
     {
         if (waitForThirdDrag)
         {
-            // interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = true;
-            interactivePanel.transform.Find("Seesaw Arrow 3").gameObject.SetActive(false);
+            TurnOffArrow("Seesaw Arrow 3");
             dialogueTriggers[6].TriggerDialogue();
             waitForThirdDrag = false;
         }
@@ -527,8 +537,8 @@ public class TutorialController : MonoBehaviour
     // tutorial 16
     public void FirstDrop()
     {
-        interactivePanel.transform.Find("Seesaw Arrow 4").gameObject.SetActive(false);
-        interactivePanel.transform.Find("Seesaw Arrow 5").gameObject.SetActive(false);
+        TurnOffArrow("Seesaw Arrow 4");
+        TurnOffArrow("Seesaw Arrow 5");
         waitForFirstDrag = false;
         dialogueTriggers[8].TriggerDialogue();
     }
@@ -540,9 +550,8 @@ public class TutorialController : MonoBehaviour
 
     public void Expanded()
     {
-        // interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = true;
-        interactivePanel.transform.Find("Seesaw Arrow 4").gameObject.SetActive(false);
-        interactivePanel.transform.Find("Seesaw Arrow 6").gameObject.SetActive(false);
+        TurnOffArrow("Seesaw Arrow 4");
+        TurnOffArrow("Seesaw Arrow 6");
         waitForSecondDrag = false;
         dialogueTriggers[9].TriggerDialogue();
     }
@@ -555,6 +564,48 @@ public class TutorialController : MonoBehaviour
             tutorialManager.EndDialogueNow();
             skipButton.SetActive(false);
             doneTutorial = true;
+        }
+    }
+
+    public void AnimateArrow(string arrowName)
+    {
+        interactivePanel.transform.Find(arrowName).gameObject.SetActive(true);
+        interactivePanel.transform.Find(arrowName).gameObject.GetComponent<TutorialArrow>().SetAnimate(true);
+    }
+
+    public void TurnOffArrow(string arrowName)
+    {
+        interactivePanel.transform.Find(arrowName).gameObject.GetComponent<TutorialArrow>().SetAnimate(false);
+        interactivePanel.transform.Find(arrowName).gameObject.GetComponent<TutorialArrow>().SetFlash(false);
+        interactivePanel.transform.Find(arrowName).gameObject.SetActive(false);
+    }
+
+    public void FlashArrow(string arrowName)
+    {
+        interactivePanel.transform.Find(arrowName).gameObject.SetActive(true);
+        interactivePanel.transform.Find(arrowName).gameObject.GetComponent<TutorialArrow>().SetFlash(true);
+    }
+
+    IEnumerator FlashLines(string name)
+    {
+        Transform obj = interactivePanel.transform.Find(name);
+        bool check = true;
+        for (int i = 0; i < 12; i++)
+        {
+            obj.gameObject.SetActive(check);
+            check = !check;
+            yield return new WaitForSeconds(0.4f);
+        }
+    }
+
+    IEnumerator FlashSide(Transform seesawside)
+    {
+        bool check = true;
+        for (int i = 0; i < 10; i++)
+        {
+            seesawside.GetChild(0).gameObject.SetActive(check);
+            check = !check;
+            yield return new WaitForSeconds(0.4f);
         }
     }
 
