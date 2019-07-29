@@ -52,23 +52,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     public void Update()
     {
-        /* Transform check = this.transform.parent.parent.parent;
-        if (check == null)
-        {
-            return;
-        }
-        
-        if (this.transform.parent.parent.parent.name == "Seesaw")
-        {
-            if (! this.transform.parent.parent.parent.gameObject.GetComponent<SeesawController>().GetDragging())
-            {
-                Vector3 current = this.gameObject.transform.Find("Image").localScale;
-                if (current.x > 1.4)
-                {
-                    this.gameObject.transform.Find("Image").localScale = new Vector3(current.x * 2 / 3, current.y * 2 / 3, current.z);
-                }
-            }
-        } */
+
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -339,6 +323,12 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
             this.gameObject.transform.Find("Balloons").gameObject.SetActive(false);
             this.gameObject.transform.Find("Image").localScale = new Vector3(1, 1, 1);
             this.gameObject.transform.Find("Image").gameObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+            
+            if (typeOfItem == Slot.Variable)
+            {
+                this.gameObject.transform.Find("Text Pos").gameObject.SetActive(true);
+                this.gameObject.transform.Find("Text Neg").gameObject.SetActive(false);
+            }
         }
         else if (typeOfItem == Slot.Bracket)
         {
@@ -355,6 +345,12 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
             this.gameObject.transform.Find("Balloons").gameObject.SetActive(true);
             this.gameObject.transform.Find("Image").localScale = new Vector3(-1, -1, 1);
             this.gameObject.transform.Find("Image").gameObject.GetComponent<Image>().color = new Color32(255, 0, 0, 255);
+        
+            if (typeOfItem == Slot.Variable)
+            {
+                this.gameObject.transform.Find("Text Pos").gameObject.SetActive(false);
+                this.gameObject.transform.Find("Text Neg").gameObject.SetActive(true);
+            }
         }
         else if (typeOfItem == Slot.Bracket)
         {

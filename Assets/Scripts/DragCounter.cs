@@ -40,7 +40,7 @@ public class DragCounter : MonoBehaviour
 
         boundaryTwo = 2 * boundaryOne;
 
-        constantBy = (float) 200 / (boundaryOne * 3); // TODO: finetune this so that it fits screen stretch
+        constantBy = (float) 150 / (boundaryOne * 3); // TODO: finetune this so that it fits screen stretch
 
     }
 

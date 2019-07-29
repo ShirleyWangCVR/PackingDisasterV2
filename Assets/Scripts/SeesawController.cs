@@ -19,6 +19,8 @@ public class SeesawController : MonoBehaviour
     public Text leftEquationText;
     public Text rightEquationText;
     public Text signText;
+    public HintSystem hintSystem;
+    
     // public Text equationText;
 
     protected bool currentlyDragging;
@@ -233,7 +235,7 @@ public class SeesawController : MonoBehaviour
             currangle = 360 - this.transform.rotation.eulerAngles.z;
         }
 
-        return currangle > 25;
+        return currangle > 20;
     }
 
     // check if a variable is correctly isolated
@@ -454,6 +456,10 @@ public class SeesawController : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         audioSource.Play();
+        if (hintSystem != null)
+        {
+            hintSystem.SeesawTilting();
+        }
     }
 
     public int LeftSideNumVariables()

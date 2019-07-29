@@ -177,11 +177,14 @@ public class SeesawSide : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
     public int NumBrackets()
     {
         int num = 0;
-        foreach(Transform child in terms.transform)
+        if (terms != null)
         {
-            if (child.gameObject.GetComponent<Draggable>().typeOfItem == Draggable.Slot.Bracket)
+            foreach(Transform child in terms.transform)
             {
-                num++;
+                if (child.gameObject.GetComponent<Draggable>().typeOfItem == Draggable.Slot.Bracket)
+                {
+                    num++;
+                }
             }
         }
         return num;

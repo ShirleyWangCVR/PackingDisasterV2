@@ -18,9 +18,11 @@ public class HintSystem : MonoBehaviour
     private string overflow = "Combine or move some terms to make more room!";
     private string switchSign = "Switch the sign when dragging from one side to the other.";
     private string isolateVariables = "Try moving all boxes to one side.";
-    private string isolateValues = "Try moving all toys to one side.";
+    private string isolateValues = "Try moving all bears to one side.";
+    private string leaveVariables = "Try leaving only variables on one side.";
+    private string leaveValues = "Try leaving only bears on one side.";
     private string combineVariables = "Try combining boxes on the same side by dragging them together.";
-    private string combineValues = "Try combining toys on the same side by dragging them together.";
+    private string combineValues = "Try combining bears on the same side by dragging them together.";
     private string expandBrackets = "Try expanding the brackets.";
     private string boxPositive = "The box needs to be positive.";
     private string boxOne = "Make sure box's coefficient is one.";
@@ -138,38 +140,79 @@ public class HintSystem : MonoBehaviour
     public void InactiveForWhile()
     {
         // check seesaw status and suggest hint
-        if (seesaw.LeftSideNumBrackets() > 0 || seesaw.RightSideNumBrackets() > 0)
+        if (level <= 3)
         {
-            StartCoroutine(ShowHint(expandBrackets));
+            if (seesaw.LeftSideNumVariables() > 0 && seesaw.RightSideNumVariables() > 0)
+            {
+                StartCoroutine(ShowHint(leaveVariables));
+            }
+            else if (seesaw.LeftSideNumValues() > 0 && seesaw.RightSideNumValues() > 0)
+            {
+                StartCoroutine(ShowHint(leaveValues));
+            }
+            else if (seesaw.transform.Find("LHSPositive").gameObject.GetComponent<SeesawSide>().NumVariables() >= 1 && seesaw.transform.Find("LHSNegative").gameObject.GetComponent<SeesawSide>().NumVariables() >= 1)
+            {
+                StartCoroutine(ShowHint(combineVariables));
+            }
+            else if (seesaw.transform.Find("RHSPositive").gameObject.GetComponent<SeesawSide>().NumVariables() >= 1 && seesaw.transform.Find("RHSNegative").gameObject.GetComponent<SeesawSide>().NumVariables() >= 1)
+            {
+                StartCoroutine(ShowHint(combineVariables));
+            }
+            else if (seesaw.transform.Find("LHSPositive").gameObject.GetComponent<SeesawSide>().NumValues() >= 1 && seesaw.transform.Find("LHSNegative").gameObject.GetComponent<SeesawSide>().NumValues() >= 1)
+            {
+                StartCoroutine(ShowHint(combineValues));
+            }
+            else if (seesaw.transform.Find("RHSPositive").gameObject.GetComponent<SeesawSide>().NumValues() >= 1 && seesaw.transform.Find("RHSNegative").gameObject.GetComponent<SeesawSide>().NumValues() >= 1)
+            {
+                StartCoroutine(ShowHint(combineValues));
+            }
+            else if (seesaw.NumNegativeVariables() > 0)
+            {
+                StartCoroutine(ShowHint(boxPositive));
+            }
+            else if (seesaw.CheckIfComplete())
+            {
+                StartCoroutine(ShowHint(pressDone));
+            }
         }
-        else if (seesaw.LeftSideNumVariables() > 0 && seesaw.RightSideNumVariables() > 0)
+        else
         {
-            StartCoroutine(ShowHint(isolateVariables));
+            if (seesaw.LeftSideNumBrackets() > 0 || seesaw.RightSideNumBrackets() > 0)
+            {
+                StartCoroutine(ShowHint(expandBrackets));
+            }
+            else if (seesaw.LeftSideNumVariables() > 0 && seesaw.RightSideNumVariables() > 0)
+            {
+                StartCoroutine(ShowHint(isolateVariables));
+            }
+            else if (seesaw.LeftSideNumValues() > 0 && seesaw.RightSideNumValues() > 0)
+            {
+                StartCoroutine(ShowHint(isolateValues));
+            }
+            else if (seesaw.LeftSideNumVariables() > 1 || seesaw.RightSideNumVariables() > 1)
+            {
+                StartCoroutine(ShowHint(combineVariables));
+            }
+            else if (seesaw.LeftSideNumValues() > 1 || seesaw.RightSideNumValues() > 1)
+            {
+                StartCoroutine(ShowHint(combineValues));
+            }
+            else if (seesaw.NumNegativeVariables() > 0)
+            {
+                StartCoroutine(ShowHint(boxPositive));
+            }
+            else if (seesaw.CoefficientVariables() != 1)
+            {
+                StartCoroutine(ShowHint(boxOne));
+            }
+            else if (seesaw.CheckIfComplete())
+            {
+                StartCoroutine(ShowHint(pressDone));
+            }
         }
-        else if (seesaw.LeftSideNumValues() > 0 && seesaw.RightSideNumValues() > 0)
-        {
-            StartCoroutine(ShowHint(isolateValues));
-        }
-        else if (seesaw.LeftSideNumVariables() > 1 || seesaw.RightSideNumVariables() > 1)
-        {
-            StartCoroutine(ShowHint(combineVariables));
-        }
-        else if (seesaw.LeftSideNumValues() > 1 || seesaw.RightSideNumValues() > 1)
-        {
-            StartCoroutine(ShowHint(combineValues));
-        }
-        else if (seesaw.NumNegativeVariables() > 0)
-        {
-            StartCoroutine(ShowHint(boxPositive));
-        }
-        else if (seesaw.CoefficientVariables() != 1)
-        {
-            StartCoroutine(ShowHint(boxOne));
-        }
-        else if (seesaw.CheckIfComplete())
-        {
-            StartCoroutine(ShowHint(pressDone));
-        }
+
+
+        
         // TODO: add if we can think of any other hints
     }
 
@@ -244,5 +287,10 @@ public class HintSystem : MonoBehaviour
     public bool BracketDrag(string dragData)
     {
         return dragData.StartsWith("Bracket");
+    }
+
+    public void SeesawTilting()
+    {
+        StartCoroutine(ShowHint("The seesaw is going to fall over! Undo your last move to rebalance the seesaw!"));
     }
 }
