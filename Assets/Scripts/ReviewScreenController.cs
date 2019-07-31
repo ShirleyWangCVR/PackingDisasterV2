@@ -23,7 +23,6 @@ public class ReviewScreenController : MonoBehaviour
         if (dataController != null)
         {
             problemArea = dataController.GetProblemArea();
-            Debug.Log(problemArea);
             if (problemArea != "")
             {
                 open = true;

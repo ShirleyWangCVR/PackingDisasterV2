@@ -8,11 +8,10 @@ using System.IO;
  */
 public class GameDataEditor : EditorWindow
 {
-    Vector2 scrollPosition = Vector2.zero;
-
     public GameData gameData;
 
-    private string gameDataProjectFilePath = "/StreamingAssets/equations.json";
+    string gameDataProjectFilePath = "/StreamingAssets/equations.json";
+    Vector2 scrollPosition = Vector2.zero;
     
     [MenuItem ("Window/Game Data Editor")]
     static void Init()

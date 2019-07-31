@@ -145,98 +145,16 @@ public class DataController : MonoBehaviour
                 return allEquationData.type7Equations[levelIndexes[6]];
             }
         }
-
         return allEquationData.tut1Equation;
-        
-        
-        
-        
-        
-        /* if (level == 1)
-        {
-            return allEquationData.tut1Equation;
-        }
-        else if (level == 2)
-        {
-            return allEquationData.tut2Equation;
-        }
-        else if (level == 5)
-        {
-            return allEquationData.type1Equations[levelIndexes[0]];
-        }
-        else if (level == 6)
-        {
-            return allEquationData.tut3Equation;
-        }
-        else if (level == 10)
-        {
-            return allEquationData.type2Equations[levelIndexes[1]];
-        }
-        else if (level == 11)
-        {
-            return allEquationData.tut4Equation;
-        }
-        else if (level == 15)
-        {
-            return allEquationData.type3Equations[levelIndexes[2]];
-        }
-        else if (level == 16)
-        {
-            return allEquationData.tut5Equation;
-        }
-        else if (level == 20)
-        {
-            return allEquationData.type4Equations[levelIndexes[3]];
-        }
-        else if (level == 25)
-        {
-            return allEquationData.type5Equations[levelIndexes[4]];
-        }
-
-        return allEquationData.tut1Equation; */
     }
 
     public int GetTriedTutorial(int level)
     {
         return triedTutorial[level - 1];
-        
-        /* if (level <= 2)
-        {
-            return triedTutorial[level - 1];
-        }
-        else if (level == 6)
-        {
-            return triedTutorial[2];
-        }
-        else if (level == 11)
-        {
-            return triedTutorial[3];
-        }
-        else if (level == 16)
-        {
-            return triedTutorial[4];
-        }
-        return 0; */
     }
 
     public void SetTriedTutorial(int level, int num)
     {
-        /* if (level <= 2)
-        {
-            triedTutorial[level - 1] = num;
-        }
-        else if (level == 6)
-        {
-            triedTutorial[2] = num;
-        }
-        else if (level == 11)
-        {
-            triedTutorial[3] = num;
-        }
-        else if (level == 16)
-        {
-            triedTutorial[4] = num;
-        } */
         triedTutorial[level - 1] = num;
     }
 
@@ -367,32 +285,17 @@ public class DataController : MonoBehaviour
             }
         }
 
-        /* if (level <= 5)
-        {
-            level = 1;
-        }
-        else if (level <= 10)
-        {
-            level = 2;
-        }
-        else if (level <= 15)
-        {
-            level = 3;
-        }
-        else if (level <= 20)
-        {
-            level = 4;
-        }
-        else if (level <= 25)
-        {
-            level = 5;
-        } */
-
         starsObtained[level - 1] = starsObtained[level - 1] + stars;
 
-        if (starsObtained[level - 1] >= 15)
+        int bound = 15;
+        if (level <= 2)
         {
-            starsObtained[level - 1] = 15;
+            bound = 10;
+        }
+
+        if (starsObtained[level - 1] >= bound)
+        {
+            starsObtained[level - 1] = bound;
             if (level == type)
             {
                 type++;
@@ -408,7 +311,7 @@ public class DataController : MonoBehaviour
         if (! isTut)
         {
             levelIndexes[level - 1]++;
-            if (levelIndexes[level - 1] == 4) // TODO: capped at 4 because only 4 equations mostly, eventually up to whatever's in the json
+            if (levelIndexes[level - 1] == 7) // TODO: capped at 4 because only 4 equations mostly, eventually up to whatever's in the json
             {
                 levelIndexes[level - 1] = 0;
             }

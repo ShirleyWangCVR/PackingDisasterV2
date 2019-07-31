@@ -43,8 +43,14 @@ public class FinishedPanelManager : MonoBehaviour
         stageText.text = "Stage " + level.ToString();
         SetStarMeter();
 
+        int bound = 15;
+        if (level <= 2)
+        {
+            bound = 10;
+        }
+
         int starsCount = dataController.GetStars(level);
-        if (starsCount == 15)
+        if (starsCount == bound)
         {
             nextQuestion.transform.Find("Text").gameObject.GetComponent<Text>().text = "Next Topic";
         }
@@ -63,7 +69,7 @@ public class FinishedPanelManager : MonoBehaviour
         userMessage.text = "You Determined Correctly " + correctValue.ToString() + " in the Box! You Win!";
         finishedDisplay.transform.Find("Question").gameObject.SetActive(false);
 
-        if (dataController.GetDifficulty() < 6)
+        if (dataController.GetDifficulty() < 4)
         {
             if (correctValue > 0)
             {
@@ -153,8 +159,14 @@ public class FinishedPanelManager : MonoBehaviour
 
     void SetStarMeter()
     {
+        int bound = 15;
+        if (level <= 2)
+        {
+            bound = 10;
+        }
+        
         int starsCount = dataController.GetStars(level);
-        starMeter.transform.Find("Cover").gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(192 * (15 - starsCount) / 15, 32);
-        starMeter.transform.Find("Text").gameObject.GetComponent<Text>().text = starsCount.ToString() + "/15";
+        starMeter.transform.Find("Cover").gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(192 * (bound - starsCount) / bound, 32);
+        starMeter.transform.Find("Text").gameObject.GetComponent<Text>().text = starsCount.ToString() + "/" + bound.ToString();
     }
 }

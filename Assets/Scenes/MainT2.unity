@@ -597,6 +597,16 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: BackToMainMenu
       objectReference: {fileID: 0}
+    - target: {fileID: 89101194582020607, guid: 63b35ae6cb6b0444fb6ca659890ea828,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1191794855}
+    - target: {fileID: 89101194582020607, guid: 63b35ae6cb6b0444fb6ca659890ea828,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: GoToReview
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 63b35ae6cb6b0444fb6ca659890ea828, type: 3}
 --- !u!224 &78353475 stripped
@@ -3424,7 +3434,7 @@ PrefabInstance:
     - target: {fileID: 8891761641645071133, guid: 69f8133313d233b438347fb1dd10c4f1,
         type: 3}
       propertyPath: m_RootOrder
-      value: 16
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 8891761641645071133, guid: 69f8133313d233b438347fb1dd10c4f1,
         type: 3}
@@ -3893,8 +3903,8 @@ RectTransform:
   - {fileID: 632699470}
   - {fileID: 1369664225}
   - {fileID: 1481631444}
-  - {fileID: 742954071}
   - {fileID: 1027995081}
+  - {fileID: 742954071}
   - {fileID: 78353475}
   m_Father: {fileID: 0}
   m_RootOrder: 6
@@ -4230,7 +4240,7 @@ RectTransform:
   - {fileID: 1707198293}
   - {fileID: 319261312}
   m_Father: {fileID: 858786911}
-  m_RootOrder: 17
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -6985,10 +6995,10 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: c378eae285de25c4f834a4467f377f63, type: 3}
-    m_FontSize: 20
+    m_FontSize: 19
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 2
+    m_MinSize: 1
     m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0

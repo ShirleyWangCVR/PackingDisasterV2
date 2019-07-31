@@ -32,9 +32,15 @@ public class LevelSelectController : MonoBehaviour
 
         /* for (int i = 0; i < 7; i++)
         {
+            int bound = 15;
+            if (i < 2)
+            {
+                bound = 10;
+            }
+            
             int starsCount = dataController.GetStars(i + 1);
-            starMeters[i].transform.Find("Cover").gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(292 * (15 - starsCount) / 15, 32);
-            starMeters[i].transform.Find("Text").gameObject.GetComponent<Text>().text = starsCount.ToString() + "/15";
+            starMeters[i].transform.Find("Cover").gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(292 * (bound - starsCount) / bound, 32);
+            starMeters[i].transform.Find("Text").gameObject.GetComponent<Text>().text = starsCount.ToString() + "/" + bound.ToString();
 
             if (i < 6)
             {
@@ -52,14 +58,14 @@ public class LevelSelectController : MonoBehaviour
                 topicLabels[i].transform.Find("Lock").gameObject.SetActive(false);
                 topicLabels[i].GetComponent<Image>().sprite = redback;
 
-                if (starsCount == 15)
+                if (starsCount == bound)
                 {
                     levelButtons[i].transform.Find("FullMarks").gameObject.SetActive(true);
                 }
 
                 if (i == levelsShow - 1)
                 {
-                    if (starsCount < 3)
+                    if (starsCount < 1)
                     {
                         levelButtons[i].interactable = false;
                         levelButtons[i].transform.Find("Text").gameObject.SetActive(false);

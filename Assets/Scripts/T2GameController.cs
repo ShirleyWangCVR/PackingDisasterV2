@@ -23,7 +23,7 @@ public class T2GameController : GameController
         won = false;
 
 
-        if (level < 4)
+        if (level < 5)
         {
             BothSideOperations bso = FindObjectOfType<BothSideOperations>();
             bso.gameObject.SetActive(false);

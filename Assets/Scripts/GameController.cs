@@ -40,15 +40,6 @@ public class GameController : MonoBehaviour
         inputTimer = 0;
         won = false;
 
-        /* if (gameLevel <= 5)
-        {
-            level = 1;
-        }
-        else
-        {
-            level = gameLevel / 5 + gameLevel % 5;
-        } */
-
         if (isTutorial)
         {
             levelText.text = "Tutorial " + level.ToString();
@@ -302,9 +293,14 @@ public class GameController : MonoBehaviour
 
     public void NextQuestion()
     {
-        // create a next question shortcut
+        int bound = 15;
+        if (level <= 2)
+        {
+            bound = 10;
+        }
+
         int starCount = dataController.GetStars(level);
-        if (starCount == 15)
+        if (starCount == bound)
         {
             dataController.StartLevel(level + 1, true);
         }

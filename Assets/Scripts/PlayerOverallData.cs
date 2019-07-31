@@ -17,8 +17,8 @@ public class PlayerOverallData
     public PlayerOverallData()
     {
         playerMovesDataLog = new List<PlayerMovesData>();
-        attemptsPerLevel = new int[25];
-        finalStars = new int[25];
+        attemptsPerLevel = new int[7];
+        finalStars = new int[7];
         numDragsTotal = 0;
         numDragsToDrawer = 0;
         numDragsFromDrawer = 0;

@@ -24,6 +24,8 @@ public class TutorialController : MonoBehaviour
     private bool doneTutorial;
     private bool checkArrow;
     private bool flash;
+    private Coroutine flashing1;
+    private Coroutine flashing2;
 
     // Start is called before the first frame update
     void Start()
@@ -88,6 +90,17 @@ public class TutorialController : MonoBehaviour
         {
             if (waitForFirstDrag)
             {
+                if (seesaw.GetComponent<SeesawController>().LeftSideNumValues() == 1)
+                {
+                    StopCoroutine(flashing1);
+                    interactivePanel.transform.Find("Flash 1").gameObject.SetActive(false);
+                }
+                if (seesaw.GetComponent<SeesawController>().RightSideNumValues() == 4)
+                {
+                    StopCoroutine(flashing2);
+                    interactivePanel.transform.Find("Flash 2").gameObject.SetActive(false);
+                }
+                
                 if (seesaw.GetComponent<SeesawController>().GetTilt() > 0.5)
                 {
                     TurnOffArrow("Seesaw Arrow 3");
@@ -106,6 +119,17 @@ public class TutorialController : MonoBehaviour
             }
             else if (waitForSecondDrag)
             {
+                if (seesaw.GetComponent<SeesawController>().LeftSideNumValues() == 0)
+                {
+                    StopCoroutine(flashing1);
+                    interactivePanel.transform.Find("Flash 3").gameObject.SetActive(false);
+                }
+                if (seesaw.GetComponent<SeesawController>().RightSideNumValues() == 3)
+                {
+                    StopCoroutine(flashing2);
+                    interactivePanel.transform.Find("Flash 4").gameObject.SetActive(false);
+                }
+                
                 if (seesaw.GetComponent<SeesawController>().GetTilt() > 0.5)
                 {
                     TurnOffArrow("Seesaw Arrow 3");
@@ -165,11 +189,18 @@ public class TutorialController : MonoBehaviour
                     waitForThirdDrag = true;
                 }
             }
-            if (seesaw.transform.Find("LHSPositive").gameObject.GetComponent<SeesawSide>().NumValues() == 2 && waitForThirdDrag)
+            if (waitForThirdDrag)
             {
-                TurnOffArrow("Seesaw Arrow 8");
-                FlashArrow("Seesaw Arrow 11");
-                waitForThirdDrag = false;
+                if (seesaw.transform.Find("LHSPositive").gameObject.GetComponent<SeesawSide>().NumValues() == 2 && waitForThirdDrag)
+                {
+                    TurnOffArrow("Seesaw Arrow 8");
+                    FlashArrow("Seesaw Arrow 11");
+                    waitForThirdDrag = false;
+                    StopCoroutine(flashing1);
+                    StopCoroutine(flashing2);
+                    interactivePanel.transform.Find("Flash 5").gameObject.SetActive(false);
+                    interactivePanel.transform.Find("Flash 6").gameObject.SetActive(false);
+                }
             }
         }
         else if (tutorialLevel == 4)
@@ -226,8 +257,8 @@ public class TutorialController : MonoBehaviour
         {
             AnimateArrow("Seesaw Arrow 2");
             AnimateArrow("Seesaw Arrow 3");
-            StartCoroutine(FlashLines("Flash 1"));
-            StartCoroutine(FlashLines("Flash 2"));
+            flashing1 = StartCoroutine(FlashLines("Flash 1"));
+            flashing2 = StartCoroutine(FlashLines("Flash 2"));
             waitForFirstDrag = true;
         }
         else if (tutorialLevel == 2)
@@ -270,8 +301,8 @@ public class TutorialController : MonoBehaviour
         {
             AnimateArrow("Seesaw Arrow 3");
             AnimateArrow("Seesaw Arrow 10");
-            StartCoroutine(FlashLines("Flash 3"));
-            StartCoroutine(FlashLines("Flash 4"));
+            flashing1 = StartCoroutine(FlashLines("Flash 3"));
+            flashing2 = StartCoroutine(FlashLines("Flash 4"));
             interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
             waitForSecondDrag = true;
         }
@@ -314,6 +345,7 @@ public class TutorialController : MonoBehaviour
         {
             StartCoroutine(tutorialManager.EndDialogue());
             doneTutorial = true;
+            waitForThirdDrag = true;
         }
         else if (tutorialLevel == 4)
         {
@@ -409,8 +441,8 @@ public class TutorialController : MonoBehaviour
                 if (linesLeft == 2)
                 {
                     AnimateArrow("Seesaw Arrow 8");
-                    StartCoroutine(FlashLines("Flash 5"));
-                    StartCoroutine(FlashLines("Flash 6"));
+                    flashing1 = StartCoroutine(FlashLines("Flash 5"));
+                    flashing2 = StartCoroutine(FlashLines("Flash 6"));
                 }
             }
         }
@@ -590,7 +622,7 @@ public class TutorialController : MonoBehaviour
     {
         Transform obj = interactivePanel.transform.Find(name);
         bool check = true;
-        for (int i = 0; i < 12; i++)
+        for (int i = 0; i < 20; i++)
         {
             obj.gameObject.SetActive(check);
             check = !check;

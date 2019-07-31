@@ -29,13 +29,13 @@ public class DragCounter : MonoBehaviour
         {
             boundaryOne = 4;
         }
-        else if (level <= 4)
+        else if (level <= 6)
         {
-            boundaryOne = 6;
+            boundaryOne = 8;
         }
-        else if (level == 5)
+        else
         {
-            boundaryOne = 10; // 12???
+            boundaryOne = 16; 
         }
 
         boundaryTwo = 2 * boundaryOne;
