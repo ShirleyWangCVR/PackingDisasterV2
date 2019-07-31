@@ -30,14 +30,14 @@ public class LevelSelectController : MonoBehaviour
             endingButton.SetActive(true);
         }
 
-        /* for (int i = 0; i < 7; i++)
+        for (int i = 0; i < 7; i++)
         {
             int bound = 15;
             if (i < 2)
             {
                 bound = 10;
             }
-            
+
             int starsCount = dataController.GetStars(i + 1);
             starMeters[i].transform.Find("Cover").gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(292 * (bound - starsCount) / bound, 32);
             starMeters[i].transform.Find("Text").gameObject.GetComponent<Text>().text = starsCount.ToString() + "/" + bound.ToString();
@@ -84,7 +84,7 @@ public class LevelSelectController : MonoBehaviour
                     tutorialButtons[i].transform.Find("Stars").gameObject.SetActive(false);
                 }
             }
-        } */
+        }
     }
 
     public void StartLevel(int level, bool tutorial)
