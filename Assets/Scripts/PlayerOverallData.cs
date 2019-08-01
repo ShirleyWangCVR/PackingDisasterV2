@@ -30,10 +30,8 @@ public class PlayerOverallData
         playerMovesDataLog.Add(movesData);
         int level = movesData.level;
         attemptsPerLevel[level - 1] = attemptsPerLevel[level - 1] + 1;
-        if (finalStars[level - 1] < movesData.starsObtained)
-        {
-            finalStars[level - 1] = movesData.starsObtained;
-        }
+
+        finalStars[level - 1] = finalStars[level - 1] + movesData.starsObtained;
         numDragsTotal = numDragsTotal + movesData.numDrags;
 
         foreach (string dragData in movesData.dragLog)

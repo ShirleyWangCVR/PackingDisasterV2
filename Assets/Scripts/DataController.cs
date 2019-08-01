@@ -190,34 +190,16 @@ public class DataController : MonoBehaviour
                 SceneManager.LoadScene("MainT2");
             }
         }
-
-        /* if (level <= 2)
-        {
-            SceneManager.LoadScene("TutLevel1");
-        }
-        else if (level <= 5)
-        {
-            SceneManager.LoadScene("Main"); // levels 3 to 5
-        }
-        else if (level == 6 || level == 11 || level == 16)
-        {
-            SceneManager.LoadScene("TutLevel2"); // Tut Stage 4, coefficients
-        }
-        else if (level < 26)
-        {
-            SceneManager.LoadScene("MainT2");
-        }
-        else
-        {
-            SceneManager.LoadScene("Ending");
-        } */
     }
 
     // only called when completed a question
     public void SubmitNewStars(int level, int stars, bool isTut)
     {
-        // level = currentLevel;
-
+        Debug.Log("Started submit new stars");
+        Debug.Log(level);
+        Debug.Log(stars);
+        Debug.Log(isTut);
+        
         if (isTut)
         {
             if (stars > 0)
@@ -234,45 +216,6 @@ public class DataController : MonoBehaviour
                 tutorialStars[level - 1] = stars;
                 stars = stars - starsBefore;
             }
-            
-            
-            /* if (level <= 2)
-            {
-                int starsBefore = tutorialStars[level - 1];
-                if (starsBefore <= stars)
-                {
-                    tutorialStars[level - 1] = stars;
-                    stars = stars - starsBefore;
-                }
-            }
-            else if (level == 6)
-            {
-                int starsBefore = tutorialStars[2];
-                Debug.Log(starsBefore);
-                if (starsBefore <= stars)
-                {
-                    tutorialStars[2] = stars;
-                    stars = stars - starsBefore;
-                }
-            }
-            else if (level == 11)
-            {
-                int starsBefore = tutorialStars[3];
-                if (starsBefore <= stars)
-                {
-                    tutorialStars[3] = stars;
-                    stars = stars - starsBefore;
-                }
-            }
-            else if (level == 16)
-            {
-                int starsBefore = tutorialStars[4];
-                if (starsBefore <= stars)
-                {
-                    tutorialStars[4] = stars;
-                    stars = stars - starsBefore;
-                }
-            } */
         }
         else
         {
@@ -311,12 +254,17 @@ public class DataController : MonoBehaviour
         if (! isTut)
         {
             levelIndexes[level - 1]++;
-            if (levelIndexes[level - 1] == 7) // TODO: capped at 4 because only 4 equations mostly, eventually up to whatever's in the json
+            if (levelIndexes[level - 1] == 7) 
             {
                 levelIndexes[level - 1] = 0;
             }
             prevStars = 0;
         }
+    }
+
+    public void ResetPrevStars()
+    {
+        prevStars = 0;
     }
 
     public int GetTutorialStars(int index)
@@ -450,98 +398,5 @@ public class DataController : MonoBehaviour
         }
         FindObjectOfType<DragCounter>().DraggedOnce();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // methods past this point work but currently not in use
-
-    /* public void SetNewStars(int level, int stars)
-    {
-        if (starsObtained[level - 1] < stars)
-        {
-            starsObtained[level - 1] = stars;
-        }
-    } */
-
-
-    /*
-    public int GetTotalStarsUpTo(int level)
-    {
-        int sum = 0;
-        for (int i = 0; i < level; i++)
-        {
-            sum = sum + starsObtained[i];
-        }
-        return sum;
-    } */
-
-    /* public int GetLevelsCompleted()
-    {
-        return levelsCompleted;
-    }
-
-    public void SetLevelsCompleted(int newNum)
-    {
-        levelsCompleted = newNum;
-    } */
-
-    // load dialogue data from json
-    /* private void LoadDialogueData()
-    {
-        string filePath = Path.Combine(Application.streamingAssetsPath, dialogueDataFileName);
-
-        if (File.Exists(filePath))
-        {
-            string jsonDialogueData = File.ReadAllText(filePath);
-            dialogue = JsonUtility.FromJson<DialogueData>(jsonDialogueData);
-
-        } else {
-            Debug.LogError("Cannot Load Dialogue Data");
-        }
-    }
-
-    // submit a new score and store it if it's the highest
-    public void SubmitNewPlayerScore(int newScore)
-    {
-        if (newScore > playerProgress.highestScore)
-        {
-            playerProgress.highestScore = newScore;
-            SavePlayerProgress();
-        }
-    }
-
-    public int GetHighestPlayerScore()
-    {
-        return playerProgress.highestScore;
-    }
-
-    // save current player progress in player prefs
-    private void SavePlayerProgress()
-    {
-        PlayerPrefs.SetInt("highestScore", playerProgress.highestScore);
-    }
-
-    // load current player progress
-    private void LoadPlayerProgress()
-    {
-        playerProgress = new PlayerProgress();
-
-        if (PlayerPrefs.HasKey("highestScore"))
-        {
-            playerProgress.highestScore = PlayerPrefs.GetInt("highestScore");
-        }
-    } */
-
 
 }

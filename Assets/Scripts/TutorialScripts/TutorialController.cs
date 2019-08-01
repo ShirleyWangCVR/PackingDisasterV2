@@ -26,6 +26,7 @@ public class TutorialController : MonoBehaviour
     private bool flash;
     private Coroutine flashing1;
     private Coroutine flashing2;
+    private Coroutine flashing3;
 
     // Start is called before the first frame update
     void Start()
@@ -79,7 +80,6 @@ public class TutorialController : MonoBehaviour
         else if (tutorialLevel == 6)
         {
             startingUp = true;
-            FlashArrow("Seesaw Arrow 11");
         }
     }
 
@@ -157,46 +157,43 @@ public class TutorialController : MonoBehaviour
         {
             if (waitForFirstDrag)
             {
-                // seesaw.transform.Find("RHSPositive").GetChild(0).gameObject.SetActive(true);
                 if (flash)
                 {
-                    StartCoroutine(FlashSide(seesaw.transform.Find("RHSPositive")));
+                    flashing1 = StartCoroutine(FlashSide(seesaw.transform.Find("RHSPositive")));
                     flash = false;
                 }
-
-                if (seesaw.GetComponent<SeesawController>().CheckDraggedToPositive())
+                else if (seesaw.GetComponent<SeesawController>().CheckDraggedToPositive())
                 {
                     waitForFirstDrag = false;
                     DraggedToyOver();
+                    StopCoroutine(flashing1);
                     seesaw.transform.Find("RHSPositive").GetChild(0).gameObject.SetActive(false);
                 }
             }
-            if (waitForSecondDrag)
-            {
-                // seesaw.transform.Find("LHSNegative").GetChild(0).gameObject.SetActive(true);
+            else if (waitForSecondDrag)
+            {                
                 if (flash)
                 {
-                    StartCoroutine(FlashSide(seesaw.transform.Find("LHSNegative")));
+                    flashing1 = StartCoroutine(FlashSide(seesaw.transform.Find("LHSNegative")));
                     flash = false;
                 }
-                // StartCoroutine(FlashSide(seesaw.transform.Find("LHSNegative")));
-                
-                if (seesaw.GetComponent<SeesawController>().CheckDraggedToNegative())
+                else if (seesaw.GetComponent<SeesawController>().CheckDraggedToNegative())
                 {
                     waitForSecondDrag = false;
                     DraggedToyOver2();
+                    StopCoroutine(flashing1);
                     seesaw.transform.Find("LHSNegative").GetChild(0).gameObject.SetActive(false);
                     waitForThirdDrag = true;
                 }
             }
-            if (waitForThirdDrag)
+            else if (waitForThirdDrag)
             {
                 if (seesaw.transform.Find("LHSPositive").gameObject.GetComponent<SeesawSide>().NumValues() == 2 && waitForThirdDrag)
                 {
                     TurnOffArrow("Seesaw Arrow 8");
                     FlashArrow("Seesaw Arrow 11");
                     waitForThirdDrag = false;
-                    StopCoroutine(flashing1);
+                    StopCoroutine(flashing3);
                     StopCoroutine(flashing2);
                     interactivePanel.transform.Find("Flash 5").gameObject.SetActive(false);
                     interactivePanel.transform.Find("Flash 6").gameObject.SetActive(false);
@@ -289,6 +286,7 @@ public class TutorialController : MonoBehaviour
         else if (tutorialLevel == 6)
         {
             interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
+            Debug.Log("Started flashing arrows");
             FlashArrow("Seesaw Arrow 4");
             FlashArrow("Seesaw Arrow 5");
             waitForFirstDrag = true;
@@ -326,6 +324,7 @@ public class TutorialController : MonoBehaviour
         else if (tutorialLevel == 6)
         {
             interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
+            Debug.Log("Started flashing again");
             FlashArrow("Seesaw Arrow 4");
             FlashArrow("Seesaw Arrow 6");
             waitForSecondDrag = true;
@@ -385,15 +384,8 @@ public class TutorialController : MonoBehaviour
         {
             if (dialogueNum == 1)
             {
-                if (linesLeft == 3)
+                if (linesLeft == 2)
                 {
-                    // interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
-                    // interactivePanel.transform.Find("Seesaw Arrow").gameObject.SetActive(true);
-                }
-                else if (linesLeft == 2)
-                {
-                    // interactivePanel.transform.Find("Seesaw Arrow").gameObject.SetActive(false);
-
                     FlashArrow("Seesaw Arrow 7");
                     FlashArrow("Seesaw Arrow 9");
                 }
@@ -441,25 +433,14 @@ public class TutorialController : MonoBehaviour
                 if (linesLeft == 2)
                 {
                     AnimateArrow("Seesaw Arrow 8");
-                    flashing1 = StartCoroutine(FlashLines("Flash 5"));
-                    flashing2 = StartCoroutine(FlashLines("Flash 6"));
+                    flashing2 = StartCoroutine(FlashLines("Flash 5"));
+                    flashing3 = StartCoroutine(FlashLines("Flash 6"));
                 }
             }
         }
         else if (tutorialLevel == 4)
         {
-            if (dialogueNum == 1)
-            {
-                /* if (linesLeft == 2)
-                {
-                    interactivePanel.transform.Find("Seesaw Arrow 10").gameObject.SetActive(true);
-                }
-                else if (linesLeft == 1)
-                {
-                    interactivePanel.transform.Find("Seesaw Arrow 10").gameObject.SetActive(false);
-                } */
-            }
-            else if (dialogueNum == 2)
+            if (dialogueNum == 2)
             {
                 if (linesLeft == 2)
                 {
@@ -472,6 +453,10 @@ public class TutorialController : MonoBehaviour
         {
             if (dialogueNum == 1)
             {
+                if (linesLeft == 5)
+                {
+                    FlashArrow("Seesaw Arrow 11");
+                }
                 if (linesLeft == 3)
                 {
                     TurnOffArrow("Seesaw Arrow 11");
@@ -538,21 +523,27 @@ public class TutorialController : MonoBehaviour
     // tutorial 11
     public void StartedBSO()
     {
-        if (waitForFirstDrag)
+        if (! doneTutorial)
         {
-            dialogueTriggers[4].TriggerDialogue();
-            TurnOffArrow("Seesaw Arrow");
-            waitForFirstDrag = false;
+            if (waitForFirstDrag)
+            {
+                dialogueTriggers[4].TriggerDialogue();
+                TurnOffArrow("Seesaw Arrow");
+                waitForFirstDrag = false;
+            }
         }
     }
 
     public void PressedOperation()
     {
-        if (waitForSecondDrag)
+        if (! doneTutorial)
         {
-            TurnOffArrow("Seesaw Arrow 2");
-            dialogueTriggers[5].TriggerDialogue();
-            waitForSecondDrag = false;
+            if (waitForSecondDrag)
+            {
+                TurnOffArrow("Seesaw Arrow 2");
+                dialogueTriggers[5].TriggerDialogue();
+                waitForSecondDrag = false;
+            }
         }
     }
 
@@ -569,10 +560,13 @@ public class TutorialController : MonoBehaviour
     // tutorial 16
     public void FirstDrop()
     {
-        TurnOffArrow("Seesaw Arrow 4");
-        TurnOffArrow("Seesaw Arrow 5");
-        waitForFirstDrag = false;
-        dialogueTriggers[8].TriggerDialogue();
+        if (! doneTutorial)
+        {
+            TurnOffArrow("Seesaw Arrow 4");
+            TurnOffArrow("Seesaw Arrow 5");
+            waitForFirstDrag = false;
+            dialogueTriggers[8].TriggerDialogue();
+        }
     }
 
     public void SuccessfullyExpanded()
@@ -582,10 +576,13 @@ public class TutorialController : MonoBehaviour
 
     public void Expanded()
     {
-        TurnOffArrow("Seesaw Arrow 4");
-        TurnOffArrow("Seesaw Arrow 6");
-        waitForSecondDrag = false;
-        dialogueTriggers[9].TriggerDialogue();
+        if (! doneTutorial)
+        {
+            TurnOffArrow("Seesaw Arrow 4");
+            TurnOffArrow("Seesaw Arrow 6");
+            waitForSecondDrag = false;
+            dialogueTriggers[9].TriggerDialogue();
+        }
     }
 
     public void SkipTutorial()

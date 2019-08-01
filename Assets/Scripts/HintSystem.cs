@@ -19,7 +19,7 @@ public class HintSystem : MonoBehaviour
     private string switchSign = "Switch the sign when dragging from one side to the other.";
     private string isolateVariables = "Try moving all boxes to one side.";
     private string isolateValues = "Try moving all bears to one side.";
-    private string leaveVariables = "Try leaving only variables on one side.";
+    private string leaveVariables = "Try leaving only one box on one side.";
     private string leaveValues = "Try leaving only bears on one side.";
     private string combineVariables = "Try combining boxes on the same side by dragging them together.";
     private string combineValues = "Try combining bears on the same side by dragging them together.";
@@ -55,7 +55,7 @@ public class HintSystem : MonoBehaviour
         hintBubble.enabled = true;
         hintText.text = hint;
 
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(5f);
         hintBubble.enabled = false;
         hintText.text = "";
     }
@@ -132,7 +132,6 @@ public class HintSystem : MonoBehaviour
                 // they made the same move twice in a row, might as well suggest something just in case
                 InactiveForWhile();
             }
-            // TODO: add if we can think of any other mistakes
         }
     }
 
@@ -210,15 +209,10 @@ public class HintSystem : MonoBehaviour
                 StartCoroutine(ShowHint(pressDone));
             }
         }
-
-
-        
-        // TODO: add if we can think of any other hints
     }
 
     public string GetProblemArea()
     {
-        // TODO: calculate what's the biggest problem area in the case of them solving the problem correctly
         int wrongDrags = 0;
         int bracketDrags = 0;
         for (int i = 0; i < dragLog.Count; i++)
@@ -243,7 +237,7 @@ public class HintSystem : MonoBehaviour
             // brackets not expanding enough
             return "expanding brackets";
         }
-        else if (random.Next(1, 4) == 1 && level > 3) // TODO: dunno what to check for coefficient review so its just random
+        else if (random.Next(1, 4) == 1 && level > 3) 
         {
             return "coefficients";
         }
@@ -291,6 +285,6 @@ public class HintSystem : MonoBehaviour
 
     public void SeesawTilting()
     {
-        StartCoroutine(ShowHint("The seesaw is going to fall over! Undo your last move to rebalance the seesaw!"));
+        StartCoroutine(ShowHint("The seesaw is going to fall over!"));
     }
 }

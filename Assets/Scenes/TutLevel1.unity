@@ -2940,7 +2940,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -42}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 180, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &775395508
 MonoBehaviour:
@@ -3033,7 +3033,7 @@ MonoBehaviour:
   - Now you can see the status of the seesaw easier!
   - We don't know how many bears are inside the box, so we call a box a variable and
     represent it with an X.
-  - To solve an equation, isolate X on one side of the equation with only numbers
+  - To solve an equation, isolate a box on one side of the equation with only bears
     on the other.
   - It's the same process you've been using up until now.
   tutManager: {fileID: 2065705612}

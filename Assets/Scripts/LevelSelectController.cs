@@ -11,7 +11,6 @@ public class LevelSelectController : MonoBehaviour
     public GameObject[] topicLabels;
     public Button[] tutorialButtons;
     public GameObject[] starMeters;
-    // public Sprite[] stars;
     public Sprite redback;
     public Sprite fullStar;
     public GameObject endingButton;
@@ -65,10 +64,13 @@ public class LevelSelectController : MonoBehaviour
 
                 if (i == levelsShow - 1)
                 {
-                    if (starsCount < 1)
+                    if (i != 6)
                     {
-                        levelButtons[i].interactable = false;
-                        levelButtons[i].transform.Find("Text").gameObject.SetActive(false);
+                        if (starsCount < 1)
+                        {
+                            levelButtons[i].interactable = false;
+                            levelButtons[i].transform.Find("Text").gameObject.SetActive(false);
+                        }
                     }
                 }
             }

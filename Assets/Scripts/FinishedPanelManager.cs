@@ -154,6 +154,7 @@ public class FinishedPanelManager : MonoBehaviour
 
     public void GoToReview()
     {
+        dataController.GoToNextIndex(dataController.GetCurrentTut(), level);
         SceneManager.LoadScene("Review");
     }
 

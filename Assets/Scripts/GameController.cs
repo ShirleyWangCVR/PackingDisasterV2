@@ -82,21 +82,18 @@ public class GameController : MonoBehaviour
         {
             for (int i = 0; i < lhs.numVars; i++)
             {
-                Transform lhsPositive = seesaw.transform.Find("LHSPositive").GetChild(1);
+                /* Transform lhsPositive = seesaw.transform.Find("LHSPositive").GetChild(1);
                 GameObject newVar = variablePool.GetObject();
-                newVar.transform.SetParent(lhsPositive);
-                newVar.GetComponent<HasValue>().SetValue(equation.variableValue);
+                newVar.transform.SetParent(lhsPosAitive);
+                newVar.GetComponent<HasValue>().SetValue(equation.variableValue); */
+                SetUpTerm("LHSPositive", "variable", true);
             }
         }
         else if (lhs.numVars < 0)
         {
             for (int i = 0; i < 0 - lhs.numVars; i++)
             {
-                Transform lhsNegative = seesaw.transform.Find("LHSNegative").GetChild(1);
-                GameObject newVar = variablePool.GetObject();
-                newVar.transform.SetParent(lhsNegative);
-                newVar.GetComponent<HasValue>().SetValue(equation.variableValue);
-                newVar.GetComponent<Draggable>().ShowOnNegativeSide();
+                SetUpTerm("LHSNegative", "variable", false);
             }
         }
 
@@ -104,19 +101,14 @@ public class GameController : MonoBehaviour
         {
             for (int i = 0; i < lhs.numValues; i++)
             {
-                Transform lhsPositive = seesaw.transform.Find("LHSPositive").GetChild(1);
-                GameObject newVar = toyPool.GetObject();
-                newVar.transform.SetParent(lhsPositive);
+                SetUpTerm("LHSPositive", "value", true);
             }
         }
         else if (lhs.numValues < 0)
         {
             for (int i = 0; i < 0 - lhs.numValues; i++)
             {
-                Transform lhsNegative = seesaw.transform.Find("LHSNegative").GetChild(1);
-                GameObject newVar = toyPool.GetObject();
-                newVar.transform.SetParent(lhsNegative);
-                newVar.GetComponent<Draggable>().ShowOnNegativeSide();
+                SetUpTerm("LHSNegative", "value", false);
             }
         }
 
@@ -124,21 +116,14 @@ public class GameController : MonoBehaviour
         {
             for (int i = 0; i < rhs.numVars; i++)
             {
-                Transform rhsPositive = seesaw.transform.Find("RHSPositive").GetChild(1);
-                GameObject newVar = variablePool.GetObject();
-                newVar.transform.SetParent(rhsPositive);
-                newVar.GetComponent<HasValue>().SetValue(equation.variableValue);
+                SetUpTerm("RHSPositive", "variable", true);
             }
         }
         else if (rhs.numVars < 0)
         {
             for (int i = 0; i < 0 - rhs.numVars; i++)
             {
-                Transform rhsNegative = seesaw.transform.Find("RHSNegative").GetChild(1);
-                GameObject newVar = variablePool.GetObject();
-                newVar.transform.SetParent(rhsNegative);
-                newVar.GetComponent<HasValue>().SetValue(equation.variableValue);
-                newVar.GetComponent<Draggable>().ShowOnNegativeSide();
+                SetUpTerm("RHSNegative", "variable", false);
             }
         }
 
@@ -146,20 +131,44 @@ public class GameController : MonoBehaviour
         {
             for (int i = 0; i < rhs.numValues; i++)
             {
-                Transform rhsPositive = seesaw.transform.Find("RHSPositive").GetChild(1);
-                GameObject newVar = toyPool.GetObject();
-                newVar.transform.SetParent(rhsPositive);
+                SetUpTerm("RHSPositive", "value", true);
             }
         }
         else if (rhs.numValues < 0)
         {
             for (int i = 0; i < 0 - rhs.numValues; i++)
             {
-                Transform rhsNegative = seesaw.transform.Find("RHSNegative").GetChild(1);
-                GameObject newVar = toyPool.GetObject();
-                newVar.transform.SetParent(rhsNegative);
-                newVar.GetComponent<Draggable>().ShowOnNegativeSide();
+                SetUpTerm("RHSNegative", "value", false);
             }
+        }
+    }
+
+    public void SetUpTerm(string side, string type, bool positive)
+    {
+        SimpleObjectPool pool;
+        if (type == "value")
+        {
+            pool = toyPool;
+        }
+        else
+        {
+            pool = variablePool;
+        }
+        Transform seesawSide = seesaw.transform.Find(side).GetChild(1);
+        GameObject newVar = pool.GetObject();
+        newVar.transform.SetParent(seesawSide);
+        if (type == "variable")
+        {
+            newVar.GetComponent<HasValue>().SetValue(equation.variableValue);
+        }
+
+        if (positive)
+        {
+            newVar.GetComponent<Draggable>().ShowOnPositiveSide();
+        }
+        else
+        {
+            newVar.GetComponent<Draggable>().ShowOnNegativeSide();
         }
     }
 
@@ -260,7 +269,16 @@ public class GameController : MonoBehaviour
 
     public void BackToMainMenu()
     {
-        dataController.StoreEndRoundData(timeController.GetCurrentTime(), false, 0, "");
+        if (roundActive)
+        {
+            dataController.StoreEndRoundData(timeController.GetCurrentTime(), false, 0, "exited to menu");
+            dataController.SubmitCurrentRoundData();
+        }
+
+        if (won)
+        {
+            dataController.GoToNextIndex(isTutorial, level);
+        }
         SceneManager.LoadScene("Menu");
     }
 
@@ -279,6 +297,16 @@ public class GameController : MonoBehaviour
     public void TryAgain()
     {
         // restart scene with the same equation
+        if (roundActive)
+        {
+            dataController.StoreEndRoundData(timeController.GetCurrentTime(), false, 0, "pressed restart");
+            dataController.SubmitCurrentRoundData();
+        }
+
+        if (won)
+        {
+            dataController.GoToNextIndex(isTutorial, level);
+        }
         dataController.StartLevel(level, isTutorial);
     }
 
@@ -302,7 +330,19 @@ public class GameController : MonoBehaviour
         int starCount = dataController.GetStars(level);
         if (starCount == bound)
         {
-            dataController.StartLevel(level + 1, true);
+            dataController.ResetPrevStars();
+            if (level < 6)
+            {
+                dataController.StartLevel(level + 1, true);
+            }
+            else if (level == 6)
+            {
+                dataController.StartLevel(level + 1, false);
+            }
+            else
+            {
+                SceneManager.LoadScene("Ending");
+            }
         }
         else
         {
