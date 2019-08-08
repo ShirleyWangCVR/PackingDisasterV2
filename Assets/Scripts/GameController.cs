@@ -193,10 +193,9 @@ public class GameController : MonoBehaviour
             inputTimer = 0;
         }
 
-        if(inputTimer >= 10f) // time of inactivity
+        if(inputTimer >= 6f) // time of inactivity
         {
             inputTimer = 0;
-            // Debug.Log("Inactive for 5 secs");
             if (hintSystem != null)
             {
                 hintSystem.InactiveForWhile();
@@ -321,12 +320,7 @@ public class GameController : MonoBehaviour
 
     public void NextQuestion()
     {
-        int bound = 15;
-        if (level <= 2)
-        {
-            bound = 10;
-        }
-
+        int bound = dataController.GetStarBound(level);
         int starCount = dataController.GetStars(level);
         if (starCount == bound)
         {

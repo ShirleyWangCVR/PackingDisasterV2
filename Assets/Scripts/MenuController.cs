@@ -19,11 +19,6 @@ public class MenuController : MonoBehaviour
         dataController = FindObjectOfType<DataController>();
         currentMax = dataController.GetQuestionType();
         atTut = dataController.GetAtTut();
-        /* if (currentMax > 0)
-        {
-            resumeButton.SetActive(true);
-            levelselButton.SetActive(true);
-        } */
     }
 
     // when start button is pressed

@@ -31,11 +31,7 @@ public class LevelSelectController : MonoBehaviour
 
         for (int i = 0; i < 7; i++)
         {
-            int bound = 15;
-            if (i < 2)
-            {
-                bound = 10;
-            }
+            int bound = dataController.GetStarBound(i + 1);
 
             int starsCount = dataController.GetStars(i + 1);
             starMeters[i].transform.Find("Cover").gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(292 * (bound - starsCount) / bound, 32);

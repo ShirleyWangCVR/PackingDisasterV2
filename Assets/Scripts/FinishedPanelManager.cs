@@ -27,12 +27,14 @@ public class FinishedPanelManager : MonoBehaviour
     private AudioSource audioSource;
     private DataController dataController;
     private int level;
+    private int bound;
 
     void Start()
     {
         dataController = FindObjectOfType<DataController>();
         audioSource = this.gameObject.GetComponent<AudioSource>();
         level = dataController.GetDifficulty();
+        bound = dataController.GetStarBound(level);
     }
 
     // set finished display to if player wins
@@ -42,12 +44,6 @@ public class FinishedPanelManager : MonoBehaviour
         nextQuestion.SetActive(true);
         stageText.text = "Stage " + level.ToString();
         SetStarMeter();
-
-        int bound = 15;
-        if (level <= 2)
-        {
-            bound = 10;
-        }
 
         int starsCount = dataController.GetStars(level);
         if (starsCount == bound)
@@ -160,12 +156,6 @@ public class FinishedPanelManager : MonoBehaviour
 
     void SetStarMeter()
     {
-        int bound = 15;
-        if (level <= 2)
-        {
-            bound = 10;
-        }
-        
         int starsCount = dataController.GetStars(level);
         starMeter.transform.Find("Cover").gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(192 * (bound - starsCount) / bound, 32);
         starMeter.transform.Find("Text").gameObject.GetComponent<Text>().text = starsCount.ToString() + "/" + bound.ToString();

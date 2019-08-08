@@ -324,7 +324,6 @@ public class TutorialController : MonoBehaviour
         else if (tutorialLevel == 6)
         {
             interactivePanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
-            Debug.Log("Started flashing again");
             FlashArrow("Seesaw Arrow 4");
             FlashArrow("Seesaw Arrow 6");
             waitForSecondDrag = true;
@@ -348,7 +347,6 @@ public class TutorialController : MonoBehaviour
         }
         else if (tutorialLevel == 4)
         {
-            // interactivePanel.SetActive(false);
             StartCoroutine(tutorialManager.EndDialogue());
             doneTutorial = true;
         }

@@ -230,12 +230,7 @@ public class DataController : MonoBehaviour
 
         starsObtained[level - 1] = starsObtained[level - 1] + stars;
 
-        int bound = 15;
-        if (level <= 2)
-        {
-            bound = 10;
-        }
-
+        int bound = GetStarBound(level);
         if (starsObtained[level - 1] >= bound)
         {
             starsObtained[level - 1] = bound;
@@ -243,9 +238,18 @@ public class DataController : MonoBehaviour
             {
                 type++;
                 highestTutorial = true;
-                // TODO: find a way to figure out when this is turned false
             }
         }
+    }
+
+    public int GetStarBound(int level)
+    {
+        int bound = 15;
+        if (level <= 6)
+        {
+            bound = 10;
+        }
+        return bound;
     }
 
     // go to the next equation's index after completing a level
