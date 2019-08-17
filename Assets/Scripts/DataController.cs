@@ -26,7 +26,7 @@ public class DataController : MonoBehaviour
     private bool currentlyAtTutorial; // are we currently at a tutorial
     private int type; // highest type achieved
     private bool highestTutorial; // at the highest type achieved are we currently at a tutorial
-    
+
     // private int levelsCompleted; // use this to set how many levels available on level select
     private string equationDataFileName = "equations.json";
     private PlayerOverallData playerLog;
@@ -199,7 +199,7 @@ public class DataController : MonoBehaviour
         Debug.Log(level);
         Debug.Log(stars);
         Debug.Log(isTut);
-        
+
         if (isTut)
         {
             if (stars > 0)
@@ -209,7 +209,7 @@ public class DataController : MonoBehaviour
                     highestTutorial = false;
                 }
             }
-            
+
             int starsBefore = tutorialStars[level - 1];
             if (starsBefore <= stars)
             {
@@ -244,10 +244,10 @@ public class DataController : MonoBehaviour
 
     public int GetStarBound(int level)
     {
-        int bound = 15;
-        if (level <= 6)
+        int bound = 10;
+        if (level <= 2)
         {
-            bound = 10;
+            bound = 15;
         }
         return bound;
     }
@@ -258,7 +258,7 @@ public class DataController : MonoBehaviour
         if (! isTut)
         {
             levelIndexes[level - 1]++;
-            if (levelIndexes[level - 1] == 7) 
+            if (levelIndexes[level - 1] == 7)
             {
                 levelIndexes[level - 1] = 0;
             }
